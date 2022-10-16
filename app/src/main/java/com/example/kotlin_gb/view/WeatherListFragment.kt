@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class WeatherListFragment : Fragment() {
 
@@ -33,7 +34,9 @@ class WeatherListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Creating ViewModel
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
+        // Using ViewModel
         viewModel.getLiveData().observe(viewLifecycleOwner, object : Observer<AppState> {
             override fun onChanged(t: AppState) {
                 renderData(t)
@@ -46,17 +49,24 @@ class WeatherListFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Error -> {
+                binding.flLoadingLayout.visibility = View.GONE
                 val result = appState.error
-                Toast.makeText(requireContext(), "ERROR!! $result", Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reload") { viewModel.sendRequest() }
+                    .show()
+
             }
-            AppState.Loading -> {/*TODO()*/
+            AppState.Loading -> {
+                binding.flLoadingLayout.visibility = View.VISIBLE
             }
             is AppState.Success -> {
                 val result = appState.weatherData
+                binding.flLoadingLayout.visibility = View.GONE
                 binding.cityName.text = result.city.name
                 binding.cityCoordinates.text = "${result.city.lat} ${result.city.lon}"
                 binding.feelsLikeValue.text = result.feelsLike.toString()
                 binding.temperatureValue.text = result.temperature.toString()
+                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
             }
         }
     }

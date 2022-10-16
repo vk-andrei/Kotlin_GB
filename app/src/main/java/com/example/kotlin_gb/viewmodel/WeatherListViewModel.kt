@@ -35,6 +35,9 @@ class WeatherListViewModel(
         return false
     }
 
+    // setValue - обновление данных из оснного потока
+    // postValue - обновление данных из рабочего потока
+
     fun sendRequest() {
         liveData.value = AppState.Loading
         if ((0..3).shuffled().first() == 1) {
