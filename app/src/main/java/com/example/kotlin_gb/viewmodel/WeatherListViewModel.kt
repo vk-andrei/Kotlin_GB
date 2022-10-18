@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.kotlin_gb.model.Repository
 import com.example.kotlin_gb.model.RepositoryLocalImpl
 import com.example.kotlin_gb.model.RepositoryRemoteImpl
-import java.lang.IllegalStateException
 
 /* THE SAME:
 class WeatherListViewModel : ViewModel() {
@@ -16,7 +15,7 @@ class WeatherListViewModel(
 ) :
     ViewModel() {
 
-    lateinit var repository: Repository
+    private lateinit var repository: Repository
 
     fun getLiveData(): MutableLiveData<AppState> {
         chooseRepository()
@@ -40,7 +39,7 @@ class WeatherListViewModel(
 
     fun sendRequest() {
         liveData.value = AppState.Loading
-        if ((0..3).shuffled().first() == 1) {
+        if ((0..2).shuffled().first() == 1) {
             liveData.postValue(AppState.Error(error = Throwable(IllegalStateException("something WRONG"))))
         } else {
             liveData.postValue(

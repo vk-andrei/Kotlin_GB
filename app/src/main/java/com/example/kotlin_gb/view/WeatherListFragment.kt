@@ -66,7 +66,9 @@ class WeatherListFragment : Fragment() {
                 binding.cityCoordinates.text = "${result.city.lat} ${result.city.lon}"
                 binding.feelsLikeValue.text = result.feelsLike.toString()
                 binding.temperatureValue.text = result.temperature.toString()
-                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Another request") { viewModel.sendRequest() }
+                    .show()
             }
         }
     }
