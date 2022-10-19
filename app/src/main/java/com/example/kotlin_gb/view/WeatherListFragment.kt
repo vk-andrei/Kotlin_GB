@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 class WeatherListFragment : Fragment() {
 
     private lateinit var binding: FragmentWeatherListBinding
-    lateinit var viewModel: WeatherListViewModel
+    private lateinit var viewModel: WeatherListViewModel
 
     companion object {
         fun newInstance() = WeatherListFragment()
@@ -50,7 +50,7 @@ class WeatherListFragment : Fragment() {
         when (appState) {
             is AppState.Error -> {
                 binding.flLoadingLayout.visibility = View.GONE
-                val result = appState.error
+                //val result = appState.error
                 Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reload") { viewModel.sendRequest() }
                     .show()

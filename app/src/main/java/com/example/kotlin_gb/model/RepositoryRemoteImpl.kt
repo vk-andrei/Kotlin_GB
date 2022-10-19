@@ -1,7 +1,5 @@
 package com.example.kotlin_gb.model
 
-import com.example.kotlin_gb.domain.Weather
-
 class RepositoryRemoteImpl : Repository {
     override fun getWeather(lat: Double, lon: Double): Weather {
         Thread {

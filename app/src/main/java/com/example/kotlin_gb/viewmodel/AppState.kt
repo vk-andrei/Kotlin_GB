@@ -1,6 +1,6 @@
 package com.example.kotlin_gb.viewmodel
 
-import com.example.kotlin_gb.domain.Weather
+import com.example.kotlin_gb.model.Weather
 
 sealed class AppState {
     data class Success(val weatherData: Weather) : AppState() // приложение работает, данные отобража-ся
