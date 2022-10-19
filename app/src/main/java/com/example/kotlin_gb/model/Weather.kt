@@ -12,6 +12,7 @@ data class City(
     val lon: Double
 )
 
+// НЕИЗМЕНЯЕМЫЙ СПИСОК!!! listOf
 fun getRussianCities(): List<Weather> {
     return listOf(
         Weather(City("Volgograd", 0.123, 21.213), 25, -10),

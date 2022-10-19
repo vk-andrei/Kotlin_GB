@@ -1,13 +1,18 @@
 package com.example.kotlin_gb.model
 
-class RepositoryLocalImpl : Repository {
+class RepositoryLocalImpl : RepositoryForSingleWeather, RepositoryForMultiWeather {
     override fun getWeather(lat: Double, lon: Double): Weather {
-        Thread.sleep(3_000)
         return Weather()
     }
 
-    override fun getListWeather(): List<Weather> {
-        Thread.sleep(3_000)
-        return listOf(Weather())
+    override fun getListWeather(location: Location): List<Weather> {
+        return when (location) {
+            Location.Russian -> {
+                getRussianCities()
+            }
+            Location.World -> {
+                getWorldCities()
+            }
+        }
     }
 }

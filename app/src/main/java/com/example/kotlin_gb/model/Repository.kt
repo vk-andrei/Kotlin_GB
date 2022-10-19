@@ -1,8 +1,9 @@
 package com.example.kotlin_gb.model
 
-interface Repository {
-
+fun interface RepositoryForSingleWeather {
     fun getWeather(lat: Double, lon: Double): Weather
-    fun getListWeather(): List<Weather>
+}
 
+fun interface RepositoryForMultiWeather {
+    fun getListWeather(location: Location): List<Weather>
 }

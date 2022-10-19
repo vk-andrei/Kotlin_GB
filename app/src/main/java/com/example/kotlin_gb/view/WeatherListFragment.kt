@@ -5,22 +5,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
+import com.example.kotlin_gb.model.Location
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class WeatherListFragment : Fragment() {
 
-    private lateinit var binding: FragmentWeatherListBinding
+    private var _binding: FragmentWeatherListBinding? = null
+    private val binding: FragmentWeatherListBinding
+        get() {
+            return _binding!!
+        }
+
     private lateinit var viewModel: WeatherListViewModel
+    private var isRussian = true
+
 
     companion object {
         fun newInstance() = WeatherListFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     override fun onCreateView(
@@ -28,7 +40,7 @@ class WeatherListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentWeatherListBinding.inflate(LayoutInflater.from(requireContext()))
+        _binding = FragmentWeatherListBinding.inflate(LayoutInflater.from(requireContext()))
         return binding.root
     }
 
@@ -42,7 +54,14 @@ class WeatherListFragment : Fragment() {
                 renderData(t)
             }
         })
-        viewModel.sendRequest()
+        binding.fab.setOnClickListener {
+            isRussian = !isRussian
+            if (isRussian) {
+                viewModel.getRussianList()
+            } else {
+                viewModel.getWorldList()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -51,25 +70,32 @@ class WeatherListFragment : Fragment() {
             is AppState.Error -> {
                 binding.flLoadingLayout.visibility = View.GONE
                 //val result = appState.error
-                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.sendRequest() }
+                Snackbar.make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reload") { viewModel.sendRequest(location = Location.Russian) }
                     .show()
-
             }
+            // is is needed?????
             AppState.Loading -> {
-                binding.flLoadingLayout.visibility = View.VISIBLE
+                //binding.flLoadingLayout.visibility = View.VISIBLE
             }
-            is AppState.Success -> {
+            is AppState.SuccessSingleWeather -> {
                 val result = appState.weatherData
-                binding.flLoadingLayout.visibility = View.GONE
-                binding.cityName.text = result.city.name
-                binding.cityCoordinates.text = "${result.city.lat} ${result.city.lon}"
-                binding.feelsLikeValue.text = result.feelsLike.toString()
-                binding.temperatureValue.text = result.temperature.toString()
-                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Another request") { viewModel.sendRequest() }
-                    .show()
+            }
+            is AppState.SuccessMultiWeather -> {
+                //val result = appState.weatherListData
+                binding.rvWeatherList.adapter = WeatherListAdapter(appState.weatherListData)
+
             }
         }
     }
 }
+
+/*
+binding.flLoadingLayout.visibility = View.GONE
+binding.cityName.text = result.city.name
+binding.cityCoordinates.text = "${result.city.lat} ${result.city.lon}"
+binding.feelsLikeValue.text = result.feelsLike.toString()
+binding.temperatureValue.text = result.temperature.toString()
+Snackbar.make(binding.root, "Success", Snackbar.LENGTH_INDEFINITE)
+.setAction("Another request") { viewModel.sendRequest(location = Location.Russian) }
+.show()*/

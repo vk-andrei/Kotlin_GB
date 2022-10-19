@@ -2,9 +2,7 @@ package com.example.kotlin_gb.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin_gb.model.Repository
-import com.example.kotlin_gb.model.RepositoryLocalImpl
-import com.example.kotlin_gb.model.RepositoryRemoteImpl
+import com.example.kotlin_gb.model.*
 
 /* THE SAME:
 class WeatherListViewModel : ViewModel() {
@@ -15,7 +13,8 @@ class WeatherListViewModel(
 ) :
     ViewModel() {
 
-    private lateinit var repository: Repository
+    private lateinit var repositoryForSingleWeather: RepositoryForSingleWeather
+    private lateinit var repositoryForMultiWeather: RepositoryForMultiWeather
 
     fun getLiveData(): MutableLiveData<AppState> {
         chooseRepository()
@@ -23,28 +22,40 @@ class WeatherListViewModel(
     }
 
     private fun chooseRepository() {
-        repository = if (isConnection()) {
+        repositoryForSingleWeather = if (isConnection()) {
             RepositoryRemoteImpl()
         } else {
             RepositoryLocalImpl()
         }
+        repositoryForMultiWeather = RepositoryLocalImpl()
     }
 
     private fun isConnection(): Boolean {
         return false
     }
 
-    // setValue - обновление данных из оснного потока
-    // postValue - обновление данных из рабочего потока
+    fun getRussianList() {
+        sendRequest(Location.Russian)
+    }
 
-    fun sendRequest() {
+    fun getWorldList() {
+        sendRequest(Location.World)
+    }
+
+    // setValue (value) - обновление данных из оснного потока
+    // postValue - обновление данных из рабочего потока
+    fun sendRequest(location: Location) {
         liveData.value = AppState.Loading
-        if ((0..2).shuffled().first() == 1) {
+        if ((0..3).shuffled().first() == 1) {
             liveData.postValue(AppState.Error(error = Throwable(IllegalStateException("something WRONG"))))
         } else {
             liveData.postValue(
-                AppState.Success(repository.getWeather(55.755826, 37.617299900000035))
+                AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location))
             )
         }
+    }
+
+    override fun onCleared() {    // TODO HW
+        super.onCleared()
     }
 }
