@@ -1,9 +1,10 @@
-package com.example.kotlin_gb.view
+package com.example.kotlin_gb.view.weatherlist
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.ActivityMainBinding
+import com.example.kotlin_gb.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.example.kotlin_gb.view
+package com.example.kotlin_gb.view.weatherlist
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
-import com.example.kotlin_gb.model.Location
+import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.view.details.OnCityClickable
+import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
-import com.google.android.material.snackbar.Snackbar
 
-class WeatherListFragment : Fragment() {
+class WeatherListFragment : Fragment(), OnCityClickable {
 
     private var _binding: FragmentWeatherListBinding? = null
     private val binding: FragmentWeatherListBinding
@@ -86,28 +87,21 @@ class WeatherListFragment : Fragment() {
                 val result = appState.weatherListData
                 val rv = binding.rvWeatherList
                 rv.layoutManager = LinearLayoutManager(requireActivity())
-                rv.adapter = WeatherListAdapter(result)
-
-
+                rv.adapter = WeatherListAdapter(result, this)
 
 
             }
         }
     }
 
+    override fun onCityClick(weather: Weather) {
+        requireActivity().supportFragmentManager.beginTransaction().hide(this)
+            .add(R.id.container, WeatherDetailsFragment.newInstance(weather)).addToBackStack("")
+            .commit()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 }
-
-/*
-binding.flLoadingLayout.visibility = View.GONE
-binding.cityName.text = result.city.name
-binding.cityCoordinates.text = "${result.city.lat} ${result.city.lon}"
-binding.feelsLikeValue.text = result.feelsLike.toString()
-binding.temperatureValue.text = result.temperature.toString()
-Snackbar.make(binding.root, "Success", Snackbar.LENGTH_INDEFINITE)
-.setAction("Another request") { viewModel.sendRequest(location = Location.Russian) }
-.show()*/

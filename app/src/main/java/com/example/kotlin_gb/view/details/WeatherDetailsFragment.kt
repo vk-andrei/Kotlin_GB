@@ -1,4 +1,4 @@
-package com.example.kotlin_gb.view
+package com.example.kotlin_gb.view.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -6,15 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.kotlin_gb.R
+import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.Weather
 import kotlinx.android.synthetic.main.fragment_weather_details.*
 
 class WeatherDetailsFragment : Fragment() {
 
-    private var _binding: FragmentWeatherListBinding? = null
-    private val binding: FragmentWeatherListBinding
+    private var _binding: FragmentWeatherDetailsBinding? = null
+    private val binding: FragmentWeatherDetailsBinding
         get() {
             return _binding!!
         }
@@ -23,7 +23,7 @@ class WeatherDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWeatherListBinding.inflate(inflater)
+        _binding = FragmentWeatherDetailsBinding.inflate(inflater)
         return binding.root
     }
 
