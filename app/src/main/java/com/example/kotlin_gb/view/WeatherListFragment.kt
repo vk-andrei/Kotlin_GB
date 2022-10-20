@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.Location
 import com.example.kotlin_gb.viewmodel.AppState
@@ -25,14 +27,8 @@ class WeatherListFragment : Fragment() {
     private lateinit var viewModel: WeatherListViewModel
     private var isRussian = true
 
-
     companion object {
         fun newInstance() = WeatherListFragment()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     override fun onCreateView(
@@ -54,12 +50,17 @@ class WeatherListFragment : Fragment() {
                 renderData(t)
             }
         })
+
+        viewModel.getRussianList()
+
         binding.fab.setOnClickListener {
             isRussian = !isRussian
             if (isRussian) {
                 viewModel.getRussianList()
+                binding.fab.setImageResource(R.drawable.flag_russia)
             } else {
                 viewModel.getWorldList()
+                binding.fab.setImageResource(R.drawable.flag_world)
             }
         }
     }
@@ -67,27 +68,34 @@ class WeatherListFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.Error -> {
+            is AppState.Error -> {/*
                 binding.flLoadingLayout.visibility = View.GONE
                 //val result = appState.error
                 Snackbar.make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reload") { viewModel.sendRequest(location = Location.Russian) }
-                    .show()
+                    .show()*/
             }
             // is is needed?????
             AppState.Loading -> {
                 //binding.flLoadingLayout.visibility = View.VISIBLE
             }
             is AppState.SuccessSingleWeather -> {
-                val result = appState.weatherData
+                //val result = appState.weatherData
             }
             is AppState.SuccessMultiWeather -> {
-                //val result = appState.weatherListData
-                binding.rvWeatherList.adapter = WeatherListAdapter(appState.weatherListData)
-
+                val result = appState.weatherListData
+                val rv = binding.rvWeatherList
+                rv.layoutManager = LinearLayoutManager(requireActivity())
+                rv.adapter = WeatherListAdapter(result)
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
 }
 
 /*

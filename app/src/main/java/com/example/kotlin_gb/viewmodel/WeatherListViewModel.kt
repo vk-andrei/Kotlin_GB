@@ -13,8 +13,8 @@ class WeatherListViewModel(
 ) :
     ViewModel() {
 
-    private lateinit var repositoryForSingleWeather: RepositoryForSingleWeather
-    private lateinit var repositoryForMultiWeather: RepositoryForMultiWeather
+    lateinit var repositoryForSingleWeather: RepositoryForSingleWeather
+    lateinit var repositoryForMultiWeather: RepositoryForMultiWeather
 
     fun getLiveData(): MutableLiveData<AppState> {
         chooseRepository()
@@ -44,15 +44,18 @@ class WeatherListViewModel(
 
     // setValue (value) - обновление данных из оснного потока
     // postValue - обновление данных из рабочего потока
-    fun sendRequest(location: Location) {
+    private fun sendRequest(location: Location) {
         liveData.value = AppState.Loading
+        liveData.postValue(AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location)))
+
+        /*liveData.value = AppState.Loading
         if ((0..3).shuffled().first() == 1) {
             liveData.postValue(AppState.Error(error = Throwable(IllegalStateException("something WRONG"))))
         } else {
             liveData.postValue(
                 AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location))
             )
-        }
+        }*/
     }
 
     override fun onCleared() {    // TODO HW
