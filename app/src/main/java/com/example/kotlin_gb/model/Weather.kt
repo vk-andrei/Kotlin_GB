@@ -1,16 +1,23 @@
 package com.example.kotlin_gb.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+//     id 'kotlin-android-extensions'   <-- for Parcelize in gradle
+
+@Parcelize
 data class Weather(
     val city: City = getDefaultCity(),
     val temperature: Int = 10,
     val feelsLike: Int = 11
-)
+) : Parcelable
 
+@Parcelize
 data class City(
     val name: String,
     val lat: Double,
     val lon: Double
-)
+) : Parcelable
 
 // НЕИЗМЕНЯЕМЫЙ СПИСОК!!! listOf
 fun getRussianCities(): List<Weather> {

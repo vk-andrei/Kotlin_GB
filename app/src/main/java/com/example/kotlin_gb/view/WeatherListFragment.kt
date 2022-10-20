@@ -87,6 +87,10 @@ class WeatherListFragment : Fragment() {
                 val rv = binding.rvWeatherList
                 rv.layoutManager = LinearLayoutManager(requireActivity())
                 rv.adapter = WeatherListAdapter(result)
+
+
+
+
             }
         }
     }

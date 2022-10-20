@@ -1,14 +1,24 @@
 package com.example.kotlin_gb.view
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListRecyclerItemBinding
 import com.example.kotlin_gb.model.Weather
 
 class WeatherListAdapter(private val dataList: List<Weather>) :
     RecyclerView.Adapter<WeatherListAdapter.WeatherViewHolder>() {
+
+
+    interface CityClickable {
+        fun onCityClick()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding =
