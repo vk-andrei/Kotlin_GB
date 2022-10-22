@@ -46,19 +46,25 @@ class WeatherListViewModel(
     // postValue - обновление данных из рабочего потока
     private fun sendRequest(location: Location) {
         liveData.value = AppState.Loading
-        liveData.postValue(AppState.SuccessMultiWeather(repositoryMultiWeatherGiver.getListWeather(location)))
-
-        /*liveData.value = AppState.Loading
-        if ((0..3).shuffled().first() == 1) {
-            liveData.postValue(AppState.Error(error = Throwable(IllegalStateException("something WRONG"))))
-        } else {
+        Thread {
+            Thread.sleep(2000L)
             liveData.postValue(
-                AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location))
+                AppState.SuccessMultiWeather(repositoryMultiWeatherGiver.getListWeather(location))
             )
-        }*/
+        }.start()
     }
 
     override fun onCleared() {    // TODO HW
         super.onCleared()
     }
 }
+
+
+/*liveData.value = AppState.Loading
+if ((0..3).shuffled().first() == 1) {
+    liveData.postValue(AppState.Error(error = Throwable(IllegalStateException("something WRONG"))))
+} else {
+    liveData.postValue(
+        AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location))
+    )
+}*/
