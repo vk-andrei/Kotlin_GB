@@ -28,8 +28,8 @@ class WeatherListAdapter(
         return dataList.size
     }
 
-    inner class WeatherViewHolder(view: View) :
-        RecyclerView.ViewHolder(view) {  // inner --> to see "callback"
+    // inner --> to see "callback"
+    inner class WeatherViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(weather: Weather) {
             val binding = FragmentWeatherListRecyclerItemBinding.bind(itemView)
             binding.tvCityName.text = weather.city.name
