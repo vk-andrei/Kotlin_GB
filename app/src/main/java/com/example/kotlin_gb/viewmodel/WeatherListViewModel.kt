@@ -13,8 +13,8 @@ class WeatherListViewModel(
 ) :
     ViewModel() {
 
-    lateinit var repositoryForSingleWeather: RepositoryForSingleWeather
-    lateinit var repositoryForMultiWeather: RepositoryForMultiWeather
+    lateinit var repositorySingleWeatherGiver: RepositorySingleWeatherGiver
+    lateinit var repositoryMultiWeatherGiver: RepositoryMultiWeatherGiver
 
     fun getLiveData(): MutableLiveData<AppState> {
         chooseRepository()
@@ -22,12 +22,12 @@ class WeatherListViewModel(
     }
 
     private fun chooseRepository() {
-        repositoryForSingleWeather = if (isConnection()) {
+        repositorySingleWeatherGiver = if (isConnection()) {
             RepositoryRemoteImpl()
         } else {
             RepositoryLocalImpl()
         }
-        repositoryForMultiWeather = RepositoryLocalImpl()
+        repositoryMultiWeatherGiver = RepositoryLocalImpl()
     }
 
     private fun isConnection(): Boolean {
@@ -46,7 +46,7 @@ class WeatherListViewModel(
     // postValue - обновление данных из рабочего потока
     private fun sendRequest(location: Location) {
         liveData.value = AppState.Loading
-        liveData.postValue(AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location)))
+        liveData.postValue(AppState.SuccessMultiWeather(repositoryMultiWeatherGiver.getListWeather(location)))
 
         /*liveData.value = AppState.Loading
         if ((0..3).shuffled().first() == 1) {
