@@ -2,12 +2,11 @@ package com.example.kotlin_gb.view.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
-import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.Weather
 import kotlinx.android.synthetic.main.fragment_weather_details.*
 
@@ -47,7 +46,7 @@ class WeatherDetailsFragment : Fragment() {
     companion object {
         private const val BUNDLE_EXTRA_WEATHER = "BUNDLE_EXTRA_WEATHER"
         fun newInstance(weather: Weather): WeatherDetailsFragment {
-            val bundle: Bundle = Bundle()
+            val bundle = Bundle()
             bundle.putParcelable(BUNDLE_EXTRA_WEATHER, weather)
             val fr = WeatherDetailsFragment()
             fr.arguments = bundle

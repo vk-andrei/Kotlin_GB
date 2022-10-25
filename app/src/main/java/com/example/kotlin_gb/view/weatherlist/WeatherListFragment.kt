@@ -46,11 +46,12 @@ class WeatherListFragment : Fragment(), OnCityClickable {
         // Creating ViewModel
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
         // Using ViewModel
-        viewModel.getLiveData().observe(viewLifecycleOwner, object : Observer<AppState> {
+        /*viewModel.getLiveData().observe(viewLifecycleOwner, object : Observer<AppState> {
             override fun onChanged(t: AppState) {
                 renderData(t)
             }
-        })
+        })*/
+        viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
 
         viewModel.getRussianList()
 
@@ -69,29 +70,34 @@ class WeatherListFragment : Fragment(), OnCityClickable {
     @SuppressLint("SetTextI18n")
     private fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.Error -> {/*
-                binding.flLoadingLayout.visibility = View.GONE
-                //val result = appState.error
-                Snackbar.make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.sendRequest(location = Location.Russian) }
-                    .show()*/
+            is AppState.Error -> {
+                binding.showResult()
             }
-            // is is needed?????
-            AppState.Loading -> {
-                //binding.flLoadingLayout.visibility = View.VISIBLE
+            is AppState.Loading -> {
+                binding.loading()
             }
             is AppState.SuccessSingleWeather -> {
                 //val result = appState.weatherData
+                binding.showResult()
             }
             is AppState.SuccessMultiWeather -> {
+                binding.showResult()
                 val result = appState.weatherListData
                 val rv = binding.rvWeatherList
                 rv.layoutManager = LinearLayoutManager(requireActivity())
                 rv.adapter = WeatherListAdapter(result, this)
-
-
             }
         }
+    }
+    // Функция-расширение
+    private fun FragmentWeatherListBinding.loading() {
+        this.flLoadingLayout.visibility = View.VISIBLE
+        this.fab.visibility = View.GONE
+    }
+    // Функция-расширение
+    private fun FragmentWeatherListBinding.showResult() {
+        this.flLoadingLayout.visibility = View.GONE
+        this.fab.visibility = View.VISIBLE
     }
 
     override fun onCityClick(weather: Weather) {
