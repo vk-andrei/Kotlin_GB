@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
@@ -16,6 +15,7 @@ import com.example.kotlin_gb.view.details.OnCityClickable
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class WeatherListFragment : Fragment(), OnCityClickable {
 
@@ -51,19 +51,25 @@ class WeatherListFragment : Fragment(), OnCityClickable {
                 renderData(t)
             }
         })*/
-        viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
+        viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }
 
         viewModel.getRussianList()
 
         binding.fab.setOnClickListener {
             isRussian = !isRussian
-            if (isRussian) {
-                viewModel.getRussianList()
-                binding.fab.setImageResource(R.drawable.flag_russia)
-            } else {
-                viewModel.getWorldList()
-                binding.fab.setImageResource(R.drawable.flag_world)
+            showWeatherListAndIcon(isRussian)
+        }
+    }
+
+    private fun showWeatherListAndIcon(isRussian: Boolean) {
+        if (isRussian) {
+            viewModel.getRussianList()
+            binding.fab.apply {
+                setImageResource(R.drawable.flag_russia)
             }
+        } else {
+            viewModel.getWorldList()
+            binding.fab.setImageResource(R.drawable.flag_world)
         }
     }
 
@@ -71,7 +77,14 @@ class WeatherListFragment : Fragment(), OnCityClickable {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Error -> {
-                binding.showResult()
+                binding.showError()
+                //Snackbar.make(binding.root, "ERROR", Snackbar.LENGTH_LONG).show()
+                binding.root.showSnackErrorWithAction(
+                    "Error",
+                    Snackbar.LENGTH_INDEFINITE,
+                    "Reload"
+                ) { showWeatherListAndIcon(isRussian) }
+
             }
             is AppState.Loading -> {
                 binding.loading()
@@ -89,16 +102,35 @@ class WeatherListFragment : Fragment(), OnCityClickable {
             }
         }
     }
+
     // Функция-расширение
     private fun FragmentWeatherListBinding.loading() {
         this.flLoadingLayout.visibility = View.VISIBLE
         this.fab.visibility = View.GONE
     }
+
     // Функция-расширение
     private fun FragmentWeatherListBinding.showResult() {
         this.flLoadingLayout.visibility = View.GONE
         this.fab.visibility = View.VISIBLE
     }
+
+    // Функция-расширение
+    private fun FragmentWeatherListBinding.showError() {
+        this.flLoadingLayout.visibility = View.GONE
+        this.fab.visibility = View.GONE
+    }
+
+    // Функция-расширение
+    private fun View.showSnackErrorWithAction(
+        errorTitle: String,
+        snackDuration: Int,
+        setActionName: String,
+        block: (v: View) -> Unit
+    ) {
+        Snackbar.make(this, errorTitle, snackDuration).setAction(setActionName, block).show()
+    }
+
 
     override fun onCityClick(weather: Weather) {
         requireActivity().supportFragmentManager.beginTransaction().hide(this)
