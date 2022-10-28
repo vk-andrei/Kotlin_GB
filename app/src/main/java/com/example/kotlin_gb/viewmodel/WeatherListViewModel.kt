@@ -48,14 +48,14 @@ class WeatherListViewModel(
         liveData.value = AppState.Loading
         if ((0..2).shuffled().first() == 1) {
             Thread {
-                Thread.sleep(2000L)
+                Thread.sleep(1000L)
                 liveData.postValue(
                     AppState.Error(error = Throwable(IllegalStateException("livedata.error")))
                 )
             }.start()
         } else {
             Thread {
-                Thread.sleep(2000L)
+                Thread.sleep(1000L)
                 liveData.postValue(
                     AppState.SuccessMultiWeather(repositoryMultiWeatherGiver.getListWeather(location))
                 )
@@ -67,13 +67,3 @@ class WeatherListViewModel(
         super.onCleared()
     }
 }
-
-
-/*liveData.value = AppState.Loading
-if ((0..3).shuffled().first() == 1) {
-    liveData.postValue(AppState.Error(error = Throwable(IllegalStateException("something WRONG"))))
-} else {
-    liveData.postValue(
-        AppState.SuccessMultiWeather(repositoryForMultiWeather.getListWeather(location))
-    )
-}*/
