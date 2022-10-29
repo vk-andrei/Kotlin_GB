@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class WeatherDTO(
     @SerializedName("fact")
-    val fact: Fact,
+    val fact: FactDTO,
     @SerializedName("forecast")
-    val forecast: Forecast,
+    val forecast: ForecastDTO,
     @SerializedName("info")
-    val info: Info,
+    val info: InfoDTO,
     @SerializedName("now")
     val now: Int,
     @SerializedName("now_dt")

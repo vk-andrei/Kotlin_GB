@@ -3,7 +3,7 @@ package com.example.kotlin_gb.model.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class Forecast(
+data class ForecastDTO(
     @SerializedName("date")
     val date: String,
     @SerializedName("date_ts")
@@ -12,12 +12,8 @@ data class Forecast(
     val moonCode: Int,
     @SerializedName("moon_text")
     val moonText: String,
-    @SerializedName("parts")
-    val parts: List<Part>,
-    @SerializedName("sunrise")
+    val parts: List<PartDTO>,
     val sunrise: String,
-    @SerializedName("sunset")
     val sunset: String,
-    @SerializedName("week")
     val week: Int
 )
