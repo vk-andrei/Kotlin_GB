@@ -10,6 +10,7 @@ import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.utils.WeatherLoader
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_weather_details.*
 
 class WeatherDetailsFragment : Fragment() {
@@ -40,6 +41,7 @@ class WeatherDetailsFragment : Fragment() {
             WeatherLoader.requestWeatherFromYandex(
                 localWeather.city.lat,
                 localWeather.city.lon,
+
                 object : OnYandexWeatherResponse {
                     override fun onYandexWeatherResponse(weatherDTO: WeatherDTO) {
                         requireActivity().runOnUiThread {
@@ -49,6 +51,14 @@ class WeatherDetailsFragment : Fragment() {
                                 condition = weatherDTO.fact.condition
                             })
                         }
+                    }
+
+                    override fun onFailedResponse() {
+                        Snackbar.make(
+                            binding.root,
+                            "Failed to connect. ResponseCode is not 200",
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
                 })
         }

@@ -1,9 +1,11 @@
 package com.example.kotlin_gb.utils
 
+import android.util.Log
 import android.widget.Toast
 import com.example.kotlin_gb.BuildConfig
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.view.details.OnYandexWeatherResponse
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import java.io.InputStreamReader
 import java.net.URL
@@ -30,9 +32,12 @@ object WeatherLoader {
 
                 inputStreamReader.close()
                 inputSystem.close()
+
             } else {
-                //binding.tvCityName.text = "FAILED TO CONNECTION" ?????????
+                Log.d("TAG", "WEATHER_LOADER, responseCode != 200")
+                onResponse.onFailedResponse()
             }
+
         }.start()
     }
 }
