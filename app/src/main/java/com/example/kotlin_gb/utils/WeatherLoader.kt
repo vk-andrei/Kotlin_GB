@@ -1,6 +1,7 @@
 package com.example.kotlin_gb.utils
 
 import android.widget.Toast
+import com.example.kotlin_gb.BuildConfig
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.view.details.OnYandexWeatherResponse
 import com.google.gson.Gson
@@ -17,7 +18,7 @@ object WeatherLoader {
         myConnection = uri.openConnection() as HttpsURLConnection
         myConnection.requestMethod = "GET"  // надо или нет???
         myConnection.readTimeout = 5000     // надо или нет???
-        myConnection.addRequestProperty("X-Yandex-API-Key", "156100ef-9c46-47b4-abca-f3737c5cce72")
+        myConnection.addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
 
         Thread {
             if (myConnection.responseCode == 200) {
