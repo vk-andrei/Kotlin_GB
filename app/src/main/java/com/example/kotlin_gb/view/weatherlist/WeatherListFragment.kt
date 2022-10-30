@@ -10,14 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
-import com.example.kotlin_gb.model.Weather
-import com.example.kotlin_gb.view.details.OnCityClickable
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class WeatherListFragment : Fragment(), OnCityClickable {
+class WeatherListFragment : Fragment() {
 
     private var _binding: FragmentWeatherListBinding? = null
     private val binding: FragmentWeatherListBinding
@@ -36,7 +34,6 @@ class WeatherListFragment : Fragment(), OnCityClickable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentWeatherListBinding.inflate(LayoutInflater.from(requireContext()))
         return binding.root
     }
@@ -45,12 +42,7 @@ class WeatherListFragment : Fragment(), OnCityClickable {
         super.onViewCreated(view, savedInstanceState)
         // Creating ViewModel
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
-        // Using ViewModel
-        /*viewModel.getLiveData().observe(viewLifecycleOwner, object : Observer<AppState> {
-            override fun onChanged(t: AppState) {
-                renderData(t)
-            }
-        })*/
+
         viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }
 
         viewModel.getRussianList()
@@ -78,19 +70,16 @@ class WeatherListFragment : Fragment(), OnCityClickable {
         when (appState) {
             is AppState.Error -> {
                 binding.showError()
-                //Snackbar.make(binding.root, "ERROR", Snackbar.LENGTH_LONG).show()
                 binding.root.showSnackErrorWithAction(
                     "Error",
                     Snackbar.LENGTH_INDEFINITE,
                     "Reload"
                 ) { showWeatherListAndIcon(isRussian) }
-
             }
             is AppState.Loading -> {
                 binding.loading()
             }
             is AppState.SuccessSingleWeather -> {
-                //val result = appState.weatherData
                 binding.showResult()
             }
             is AppState.SuccessMultiWeather -> {
@@ -98,7 +87,15 @@ class WeatherListFragment : Fragment(), OnCityClickable {
                 val result = appState.weatherListData
                 val rv = binding.rvWeatherList
                 rv.layoutManager = LinearLayoutManager(requireActivity())
-                rv.adapter = WeatherListAdapter(result, this)
+                rv.adapter = WeatherListAdapter(
+                    result
+                ) { weather ->
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .hide(this@WeatherListFragment)
+                        .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
+                        .addToBackStack("")
+                        .commit()
+                }
             }
         }
     }
@@ -129,13 +126,6 @@ class WeatherListFragment : Fragment(), OnCityClickable {
         block: (v: View) -> Unit
     ) {
         Snackbar.make(this, errorTitle, snackDuration).setAction(setActionName, block).show()
-    }
-
-
-    override fun onCityClick(weather: Weather) {
-        requireActivity().supportFragmentManager.beginTransaction().hide(this)
-            .add(R.id.container, WeatherDetailsFragment.newInstance(weather)).addToBackStack("")
-            .commit()
     }
 
     override fun onDestroy() {

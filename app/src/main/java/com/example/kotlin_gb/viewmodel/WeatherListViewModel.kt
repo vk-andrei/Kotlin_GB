@@ -4,10 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlin_gb.model.*
 
-/* THE SAME:
-class WeatherListViewModel : ViewModel() {
-    val liveData = MutableLiveData<Any>()
-}*/
 class WeatherListViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
 ) :
@@ -61,9 +57,5 @@ class WeatherListViewModel(
                 )
             }.start()
         }
-    }
-
-    override fun onCleared() {    // TODO HW
-        super.onCleared()
     }
 }

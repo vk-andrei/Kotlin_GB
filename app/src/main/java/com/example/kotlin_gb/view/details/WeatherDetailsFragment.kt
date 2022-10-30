@@ -33,7 +33,6 @@ class WeatherDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val weather = arguments?.getParcelable<Weather>(BUNDLE_EXTRA_WEATHER)
         val weather = arguments?.let { arg -> arg.getParcelable<Weather>(BUNDLE_EXTRA_WEATHER) }
 
         weather?.let { localWeather ->
@@ -76,11 +75,7 @@ class WeatherDetailsFragment : Fragment() {
     companion object {
         private const val BUNDLE_EXTRA_WEATHER = "BUNDLE_EXTRA_WEATHER"
         fun newInstance(weather: Weather): WeatherDetailsFragment {
-            /*val bundle = Bundle()
-            bundle.putParcelable(BUNDLE_EXTRA_WEATHER, weather)
-            val fr = WeatherDetailsFragment()
-            fr.arguments = bundle
-            return fr*/
+
             return WeatherDetailsFragment().apply {
                 this.arguments = Bundle().apply { putParcelable(BUNDLE_EXTRA_WEATHER, weather) }
             }
