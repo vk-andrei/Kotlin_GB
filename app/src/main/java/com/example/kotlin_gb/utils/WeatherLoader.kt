@@ -13,12 +13,12 @@ object WeatherLoader {
 
     fun requestWeatherFromYandex(lat: Double, lon: Double, onResponse: OnYandexWeatherResponse) {
 
-        val uri = URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
+        val uri = URL("${Const.HTTPS_YANDEX_URL}?lat=${lat}&lon=${lon}")
         var myConnection: HttpsURLConnection? = null
         myConnection = uri.openConnection() as HttpsURLConnection
-        myConnection.requestMethod = "GET"  // надо или нет???
-        myConnection.readTimeout = 5000     // надо или нет???
-        myConnection.addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
+        myConnection.requestMethod = Const.REQUEST_METHOD
+        myConnection.readTimeout = Const.READ_TIMEOUT
+        myConnection.addRequestProperty(Const.X_YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
 
         Thread {
             if (myConnection.responseCode == 200) {
@@ -35,7 +35,6 @@ object WeatherLoader {
                 Log.d("TAG", "WEATHER_LOADER, responseCode != 200")
                 onResponse.onFailedResponse()
             }
-
         }.start()
     }
 }
