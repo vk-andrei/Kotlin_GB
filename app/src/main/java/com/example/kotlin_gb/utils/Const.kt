@@ -7,6 +7,5 @@ class Const {
         const val HTTPS_YANDEX_URL = "https://api.weather.yandex.ru/v2/informers"
         const val X_YANDEX_API_KEY = "X-Yandex-API-Key"
 
-        const val SNACK_BAR_ERROR = "Reload"
     }
 }

@@ -72,9 +72,9 @@ class WeatherListFragment : Fragment() {
             is AppState.Error -> {
                 binding.showError()
                 binding.root.showSnackErrorWithAction(
-                    R.string.snack_bar_error_title.toString(),
+                    getString(R.string.snack_bar_error_title),
                     Snackbar.LENGTH_INDEFINITE,
-                    R.string.snack_bar_reload_title.toString(),
+                    getString(R.string.snack_bar_reload_title),
                 ) { showWeatherListAndIcon(isRussian) }
             }
             is AppState.Loading -> {
