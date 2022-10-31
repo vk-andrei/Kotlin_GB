@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
+import com.example.kotlin_gb.utils.Const
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
@@ -71,9 +72,9 @@ class WeatherListFragment : Fragment() {
             is AppState.Error -> {
                 binding.showError()
                 binding.root.showSnackErrorWithAction(
-                    "Error",
+                    R.string.snack_bar_error_title.toString(),
                     Snackbar.LENGTH_INDEFINITE,
-                    "Reload"
+                    R.string.snack_bar_reload_title.toString(),
                 ) { showWeatherListAndIcon(isRussian) }
             }
             is AppState.Loading -> {
@@ -120,7 +121,7 @@ class WeatherListFragment : Fragment() {
 
     // Функция-расширение
     private fun View.showSnackErrorWithAction(
-        errorTitle: String,
+        errorTitle: String = R.string.snack_bar_error_title.toString(),
         snackDuration: Int,
         setActionName: String,
         block: (v: View) -> Unit
