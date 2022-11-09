@@ -35,6 +35,7 @@ class WeatherListAdapter(
         fun bind(weather: Weather) {
             val binding = FragmentWeatherListRecyclerItemBinding.bind(itemView)
             binding.tvCityName.text = weather.city.name
+            binding.tvCountryOfCity.text = weather.city.country
             binding.root.setOnClickListener {
                 callback.onCityClick(weather)
             }

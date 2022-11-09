@@ -10,14 +10,16 @@ data class Weather(
     val city: City = getDefaultCity(),
     var temperature: Int = 10,
     var feelsLike: Int = 11,
-    var condition: String = "not information"
+    var condition: String = "not information",
+
 ) : Parcelable
 
 @Parcelize
 data class City(
     val name: String,
     val lat: Double,
-    val lon: Double
+    val lon: Double,
+    val country : String = "Russia"
 ) : Parcelable
 
 // НЕИЗМЕНЯЕМЫЙ СПИСОК!!! listOf
@@ -42,16 +44,16 @@ fun getRussianCities(): List<Weather> {
 
 fun getWorldCities(): List<Weather> {
     return listOf(
-        Weather(City("Лондон", 51.5085300, -0.1257400), 1, 2),
-        Weather(City("Токио", 35.6895000, 139.6917100), 3, 4),
-        Weather(City("Париж", 48.8534100, 2.3488000), 5, 6),
-        Weather(City("Берлин", 52.52000659999999, 13.404953999999975), 7, 8),
-        Weather(City("Рим", 41.9027835, 12.496365500000024), 9, 10),
-        Weather(City("Минск", 53.90453979999999, 27.561524400000053), 11, 12),
-        Weather(City("Стамбул", 41.0082376, 28.97835889999999), 13, 14),
-        Weather(City("Вашингтон", 38.9071923, -77.03687070000001), 15, 16),
-        Weather(City("Киев", 50.4501, 30.523400000000038), 17, 18),
-        Weather(City("Пекин", 39.90419989999999, 116.40739630000007), 19, 20)
+        Weather(City("Лондон", 51.5085300, -0.1257400, "Great Britain"), 1, 2),
+        Weather(City("Токио", 35.6895000, 139.6917100, "Japan"), 3, 4),
+        Weather(City("Париж", 48.8534100, 2.3488000,"Paris"), 5, 6),
+        Weather(City("Берлин", 52.52000659999999, 13.404953999999975,"Germany"), 7, 8),
+        Weather(City("Рим", 41.9027835, 12.496365500000024, "Italy"), 9, 10),
+        Weather(City("Минск", 53.90453979999999, 27.561524400000053, "Belarus"), 11, 12),
+        Weather(City("Стамбул", 41.0082376, 28.97835889999999, "Turkey"), 13, 14),
+        Weather(City("Вашингтон", 38.9071923, -77.03687070000001, "USA"), 15, 16),
+        Weather(City("Киев", 50.4501, 30.523400000000038, "Ukraine"), 17, 18),
+        Weather(City("Пекин", 39.90419989999999, 116.40739630000007, "China"), 19, 20)
     )
 }
 
