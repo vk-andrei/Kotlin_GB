@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kotlin_GB</string>
+    <string name="app_name">WEATHER APPLICATION</string>
     <string name="ok">OK</string>
     <string name="main_fragment">Main fragment</string>
     <string name="temperature_label">Температура</string>
@@ -11,6 +11,8 @@
 
     <string name="snack_bar_error_title">Error</string>
     <string name="snack_bar_reload_title">Reload</string>
+    <string name="default_city_name">Volgograd</string>
+    <string name="default_country_of_city_name">Russia</string>
 
 
 </resources>

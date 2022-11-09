@@ -16,7 +16,7 @@ class WeatherListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding =
-            FragmentWeatherListRecyclerItemBinding.inflate(LayoutInflater.from(parent.context))
+            FragmentWeatherListRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return WeatherViewHolder(binding)
     }
 
