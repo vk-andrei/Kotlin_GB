@@ -2,8 +2,8 @@
     <string name="app_name">WEATHER APPLICATION</string>
     <string name="ok">OK</string>
     <string name="main_fragment">Main fragment</string>
-    <string name="temperature_label">Температура</string>
-    <string name="feels_like_label">Ощущается как</string>
+    <string name="temperature_label">Temperature</string>
+    <string name="feels_like_label">Feels like</string>
     <string name="city_coordinates">lt/ln: %s, %s"</string>
     <string name="fab">fab</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -16,6 +16,4 @@
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
     <string name="find">Find</string>
-
-
 </resources>

@@ -8,4 +8,5 @@
     <dimen name="fab_margin">20dp</dimen>
     <dimen name="city_list_name_size">25sp</dimen>
     <dimen name="city_list_name_country_of_city_size">10sp</dimen>
+    <dimen name="city_details_name_country_of_city_size">20sp</dimen>
 </resources>

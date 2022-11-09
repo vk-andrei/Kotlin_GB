@@ -2,6 +2,7 @@ package com.example.kotlin_gb.view.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,7 @@ class WeatherDetailsFragment : Fragment() {
                                 feelsLike = weatherDTO.fact.feelsLike
                                 temperature = weatherDTO.fact.temp
                                 condition = weatherDTO.fact.condition
+                                stringForIcon = weatherDTO.fact.icon
                             })
                         }
                     }
@@ -70,6 +72,9 @@ class WeatherDetailsFragment : Fragment() {
         tv_condition.text = weather.condition
         tv_temperatureValue.text = weather.temperature.toString()
         tv_feelsLikeValue.text = weather.feelsLike.toString()
+        tv_string_for_icon.text = weather.stringForIcon
+
+
     }
 
     companion object {

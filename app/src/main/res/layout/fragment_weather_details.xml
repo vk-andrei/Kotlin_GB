@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/fon">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_weather_details"
@@ -14,7 +15,7 @@
             android:id="@+id/tv_cityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/city_name_margin_top"
+            android:layout_marginTop="5dp"
             android:textSize="35sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -23,13 +24,24 @@
             tools:text="Москва" />
 
         <TextView
-            android:id="@+id/tv_cityCoordinates"
+            android:id="@+id/tv_cityCountry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_cityName"
+            android:textSize="@dimen/city_details_name_country_of_city_size"
+            tools:text="Russia" />
+
+        <TextView
+            android:id="@+id/tv_cityCoordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cityCountry"
             tools:text="lt/ln: 55.755826, 37.617299900000035" />
 
         <TextView
@@ -89,5 +101,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_feelsLikeLabel"
             tools:text="-23" />
+
+        <TextView
+            android:id="@+id/tv_string_for_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15_dp"
+            android:textSize="@dimen/feels_like_text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feelsLikeValue"
+            android:text="xxxxxxxxxxxx" />
+
+        <ImageView
+            android:id="@+id/image_condition_icon"
+            android:src="@drawable/flag_russia"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_string_for_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
