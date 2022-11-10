@@ -1,6 +1,7 @@
 package com.example.kotlin_gb.view.details
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,7 +50,7 @@ class WeatherDetailsFragment : Fragment() {
                                 feelsLike = weatherDTO.fact.feelsLike
                                 temperature = weatherDTO.fact.temp
                                 condition = weatherDTO.fact.condition
-                                stringForIcon = weatherDTO.fact.icon
+                                nameIconCondition = weatherDTO.fact.icon
                             })
                         }
                     }
@@ -72,8 +73,13 @@ class WeatherDetailsFragment : Fragment() {
         tv_condition.text = weather.condition
         tv_temperatureValue.text = weather.temperature.toString()
         tv_feelsLikeValue.text = weather.feelsLike.toString()
-        tv_string_for_icon.text = weather.stringForIcon
 
+        val urlIconWeather =
+            "https://yastatic.net/weather/i/icons/funky/dark/${weather.nameIconCondition}.svg"
+
+        tv_string_for_icon.text = weather.nameIconCondition
+        Log.d("WDF", "urlIconWeather: $urlIconWeather")
+        //imageConditionIcon.
 
     }
 

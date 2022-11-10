@@ -12,10 +12,8 @@ data class Weather(
     var temperature: Int = 10,
     var feelsLike: Int = 11,
     var condition: String = "not information",
-    var stringForIcon: String = "not information",
-    var imageIconCondition: Int = 0
-
-) : Parcelable
+    var nameIconCondition: String = "not information",
+    ) : Parcelable
 
 @Parcelize
 data class City(
