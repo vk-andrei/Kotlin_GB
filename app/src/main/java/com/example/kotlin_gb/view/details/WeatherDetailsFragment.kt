@@ -1,19 +1,23 @@
 package com.example.kotlin_gb.view.details
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.model.dto.WeatherDTO
+import com.example.kotlin_gb.model.getWeatherIcon
 import com.example.kotlin_gb.utils.WeatherLoader
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_weather_details.*
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class WeatherDetailsFragment : Fragment() {
 
@@ -32,6 +36,7 @@ class WeatherDetailsFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,7 +55,7 @@ class WeatherDetailsFragment : Fragment() {
                                 feelsLike = weatherDTO.fact.feelsLike
                                 temperature = weatherDTO.fact.temp
                                 condition = weatherDTO.fact.condition
-                                nameIconCondition = weatherDTO.fact.icon
+                                nowDate = weatherDTO.nowDt
                             })
                         }
                     }
@@ -66,22 +71,33 @@ class WeatherDetailsFragment : Fragment() {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun renderData(weather: Weather) = with(binding) {
         tv_cityName.text = weather.city.name
+        tv_cityCountry.text = weather.city.country
         tv_cityCoordinates.text = "${weather.city.lat.toString()} ${weather.city.lon.toString()}"
         tv_condition.text = weather.condition
         tv_temperatureValue.text = weather.temperature.toString()
         tv_feelsLikeValue.text = weather.feelsLike.toString()
 
-        val urlIconWeather =
-            "https://yastatic.net/weather/i/icons/funky/dark/${weather.nameIconCondition}.svg"
+        imageConditionIcon.apply {
+            setImageResource(getWeatherIcon(weather.condition))
+            alpha = 0.2f
+        }
 
-        tv_string_for_icon.text = weather.nameIconCondition
-        Log.d("WDF", "urlIconWeather: $urlIconWeather")
-        //imageConditionIcon.
+        //tv_temp.text = "${weather.nowDate} = ${weather.nowDate.toDate().formatTo("EEEE dd MMM yyyy")}"
+        tv_day_of_week.text = formatDateStr(weather.nowDate)
 
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatDateStr(strDate: String?): String? {
+        return OffsetDateTime.parse(strDate)
+            .format(DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH))
+    }
+
 
     companion object {
         private const val BUNDLE_EXTRA_WEATHER = "BUNDLE_EXTRA_WEATHER"
