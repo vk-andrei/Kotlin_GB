@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
-import com.example.kotlin_gb.utils.Const
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
@@ -41,7 +40,7 @@ class WeatherListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Creating ViewModel
+
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }

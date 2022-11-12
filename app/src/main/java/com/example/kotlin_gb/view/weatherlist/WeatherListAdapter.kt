@@ -1,7 +1,6 @@
 package com.example.kotlin_gb.view.weatherlist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_gb.databinding.FragmentWeatherListRecyclerItemBinding

@@ -36,7 +36,6 @@ class WeatherDetailsFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,19 +80,19 @@ class WeatherDetailsFragment : Fragment() {
     private fun renderData(weather: Weather) = with(binding) {
         imageConditionIcon.apply {
             setImageResource(getWeatherIcon(weather.condition))
-            alpha = 0.8f
+            alpha = 0.7f
         }
         imageIconHumidity.apply {
             setImageResource(R.drawable.icon_humidity_png)
-            alpha = 0.8f
+            alpha = 0.9f
         }
         imageIconWindSpeed.apply {
             setImageResource(R.drawable.icon_wind_png)
-            alpha = 0.8f
+            alpha = 0.9f
         }
         imageIconPressure.apply {
             setImageResource(R.drawable.icon_pressure_png)
-            alpha = 0.8f
+            alpha = 0.9f
         }
 
         tv_cityName.text = weather.city.name
@@ -104,7 +103,7 @@ class WeatherDetailsFragment : Fragment() {
         tv_feelsLikeValue.text = String.format("${weather.feelsLike}°")
         tv_dayOfWeek.text = formatDateStr(weather.nowDate)
         tv_humidityValue.text = String.format("${weather.humidity}%%")
-        tv_windSpeedValue.text = String.format("${weather.humidity} m/sec")
+        tv_windSpeedValue.text = String.format("${weather.windSpeed} m/sec")
         tv_pressureValue.text = String.format("${weather.pressure} mmHg")
     }
 

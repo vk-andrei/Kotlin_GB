@@ -1,10 +1,8 @@
 package com.example.kotlin_gb.view.weatherlist
 
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_gb.R
-import kotlinx.android.synthetic.main.fragment_weather_details.*
 
 class MainActivity : AppCompatActivity() {
 
