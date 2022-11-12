@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.model.dto.WeatherDTO
@@ -56,6 +57,9 @@ class WeatherDetailsFragment : Fragment() {
                                 temperature = weatherDTO.fact.temp
                                 condition = weatherDTO.fact.condition
                                 nowDate = weatherDTO.nowDt
+                                humidity = weatherDTO.fact.humidity
+                                windSpeed = weatherDTO.fact.windSpeed
+                                pressure = weatherDTO.fact.pressureMm
                             })
                         }
                     }
@@ -75,21 +79,33 @@ class WeatherDetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun renderData(weather: Weather) = with(binding) {
+        imageConditionIcon.apply {
+            setImageResource(getWeatherIcon(weather.condition))
+            alpha = 0.8f
+        }
+        imageIconHumidity.apply {
+            setImageResource(R.drawable.icon_humidity_png)
+            alpha = 0.8f
+        }
+        imageIconWindSpeed.apply {
+            setImageResource(R.drawable.icon_wind_png)
+            alpha = 0.8f
+        }
+        imageIconPressure.apply {
+            setImageResource(R.drawable.icon_pressure_png)
+            alpha = 0.8f
+        }
+
         tv_cityName.text = weather.city.name
         tv_cityCountry.text = weather.city.country
         tv_cityCoordinates.text = "${weather.city.lat.toString()} ${weather.city.lon.toString()}"
         tv_condition.text = weather.condition
-        tv_temperatureValue.text = weather.temperature.toString()
-        tv_feelsLikeValue.text = weather.feelsLike.toString()
-
-        imageConditionIcon.apply {
-            setImageResource(getWeatherIcon(weather.condition))
-            alpha = 0.2f
-        }
-
-        //tv_temp.text = "${weather.nowDate} = ${weather.nowDate.toDate().formatTo("EEEE dd MMM yyyy")}"
-        tv_day_of_week.text = formatDateStr(weather.nowDate)
-
+        tv_temperatureValue.text = String.format("${weather.temperature}°")
+        tv_feelsLikeValue.text = String.format("${weather.feelsLike}°")
+        tv_dayOfWeek.text = formatDateStr(weather.nowDate)
+        tv_humidityValue.text = String.format("${weather.humidity}%%")
+        tv_windSpeedValue.text = String.format("${weather.humidity} m/sec")
+        tv_pressureValue.text = String.format("${weather.pressure} mmHg")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

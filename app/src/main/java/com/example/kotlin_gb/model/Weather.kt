@@ -13,6 +13,9 @@ data class Weather(
     var feelsLike: Int = 11,
     var condition: String = "not information",
     var nowDate: String = "not information",
+    var humidity: Int = 0,
+    var windSpeed: Double = 0.0,
+    var pressure: Int = 0
     ) : Parcelable
 
 @Parcelize
