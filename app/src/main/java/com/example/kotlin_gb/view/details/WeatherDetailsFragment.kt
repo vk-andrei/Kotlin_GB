@@ -97,8 +97,10 @@ class WeatherDetailsFragment : Fragment() {
 
         tv_cityName.text = weather.city.name
         tv_cityCountry.text = weather.city.country
-        tv_cityCoordinates.text = "${weather.city.lat.toString()} ${weather.city.lon.toString()}"
+        // TODO round coordinates!!!
+        tv_cityCoordinates.text = "lat:${weather.city.lat}, lon:${weather.city.lon}"
         tv_condition.text = weather.condition
+
         tv_temperatureValue.text = String.format("${weather.temperature}°")
         tv_feelsLikeValue.text = String.format("${weather.feelsLike}°")
         tv_dayOfWeek.text = formatDateStr(weather.nowDate)

@@ -2,6 +2,7 @@ package com.example.kotlin_gb.view.weatherlist
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
+import com.example.kotlin_gb.model.City
+import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
@@ -50,6 +53,20 @@ class WeatherListFragment : Fragment() {
         binding.fab.setOnClickListener {
             isRussian = !isRussian
             showWeatherListAndIcon(isRussian)
+        }
+
+        binding.btnFindWithCoordinates.setOnClickListener {
+            //TODO validateInputs()
+            val lat = binding.etMyLatitude.text.toString().toDouble()
+            val lon = binding.etMyLongitude.text.toString().toDouble()
+            //Log.d("WLF", "lat = $lat, lon = $lon")
+            val weather = Weather(City("By coordinates",lat, lon, "Unknown place"))
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .hide(this@WeatherListFragment)
+                .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
+                .addToBackStack("")
+                .commit()
         }
     }
 

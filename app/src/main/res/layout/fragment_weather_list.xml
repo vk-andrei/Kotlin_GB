@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/tv_my_latitude"
+            android:id="@+id/et_my_latitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -26,19 +26,21 @@
             android:focusable="auto"
             android:fontFamily="@font/comfortaa_light"
             android:hint="@string/latitude"
+            android:inputType="numberDecimal"
             android:maxLines="1"
             android:padding="5dp"
             android:textSize="20sp"
             android:textStyle="italic" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/tv_my_longitude"
+            android:id="@+id/et_my_longitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/border"
             android:fontFamily="@font/comfortaa_light"
             android:hint="@string/longitude"
+            android:inputType="numberDecimal"
             android:maxLines="1"
             android:padding="5dp"
             android:textSize="20sp"
@@ -54,6 +56,8 @@
             android:padding="5dp"
             android:text="@string/find"
             android:textSize="20sp"
+            android:insetTop ="0dp"
+            android:insetBottom ="0dp"
             android:textStyle="italic" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

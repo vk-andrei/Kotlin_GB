@@ -13,7 +13,7 @@
     <string name="snack_bar_reload_title">Reload</string>
     <string name="default_city_name">Volgograd</string>
     <string name="default_country_of_city_name">Russia</string>
-    <string name="latitude">latitude</string>
-    <string name="longitude">longitude</string>
+    <string name="latitude">lat</string>
+    <string name="longitude">lon</string>
     <string name="find">Find</string>
 </resources>

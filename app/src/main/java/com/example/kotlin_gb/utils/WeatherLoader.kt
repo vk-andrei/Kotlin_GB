@@ -22,6 +22,7 @@ object WeatherLoader {
 
         Thread {
             if (myConnection.responseCode == 200) {
+                Log.d("TAG", "WEATHER_LOADER, responseCode = 200")
                 val inputSystem = myConnection.inputStream
                 val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
                 val weatherDTO = Gson().fromJson(inputStreamReader, WeatherDTO::class.java)
@@ -32,6 +33,7 @@ object WeatherLoader {
                 inputSystem.close()
 
             } else {
+                // TODO Toast -> responseCode != 200
                 Log.d("TAG", "WEATHER_LOADER, responseCode != 200")
                 onResponse.onFailedResponse()
             }
