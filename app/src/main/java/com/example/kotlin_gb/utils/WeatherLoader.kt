@@ -21,6 +21,7 @@ object WeatherLoader {
         myConnection.addRequestProperty(Const.X_YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
 
         Thread {
+            Log.d("TAG", "WEATHER_LOADER, responseCode = ${myConnection.responseCode}")
             if (myConnection.responseCode == 200) {
                 Log.d("TAG", "WEATHER_LOADER, responseCode = 200")
                 val inputSystem = myConnection.inputStream
