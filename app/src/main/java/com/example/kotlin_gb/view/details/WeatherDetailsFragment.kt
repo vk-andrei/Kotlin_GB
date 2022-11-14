@@ -32,7 +32,7 @@ class WeatherDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWeatherDetailsBinding.inflate(inflater)
+        _binding = FragmentWeatherDetailsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

@@ -2,7 +2,6 @@ package com.example.kotlin_gb.view.weatherlist
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +12,12 @@ import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.City
 import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.utils.Utils.hideKeyboard
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
+
 
 class WeatherListFragment : Fragment() {
 
@@ -56,18 +57,31 @@ class WeatherListFragment : Fragment() {
         }
 
         binding.btnFindWithCoordinates.setOnClickListener {
-            //TODO validateInputs()
-            val lat = binding.etMyLatitude.text.toString().toDouble()
-            val lon = binding.etMyLongitude.text.toString().toDouble()
-            //Log.d("WLF", "lat = $lat, lon = $lon")
-            val weather = Weather(City("By coordinates",lat, lon, "Unknown place"))
+            val lat = binding.etMyLatitude.text.toString()
+            val lon = binding.etMyLongitude.text.toString()
+            if (validateInputs(lat, lon)) {
+                val latChecked = lat.trim().toDouble()
+                val lonChecked = lon.trim().toDouble()
+                //TODO round values of lat and lon
+                val weather =
+                    Weather(City("By coordinates", latChecked, lonChecked, "Unknown place"))
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .hide(this@WeatherListFragment)
-                .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
-                .addToBackStack("")
-                .commit()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .hide(this@WeatherListFragment)
+                    .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
+                    .addToBackStack("")
+                    .commit()
+                view.hideKeyboard()
+
+            } else {
+                view.hideKeyboard()
+                binding.root.showSnackError("Input correct numbers", Snackbar.LENGTH_SHORT)
+            }
         }
+    }
+
+    private fun validateInputs(lat: String, lon: String): Boolean {
+        return (lat.isNotEmpty() && lon.isNotEmpty())
     }
 
     private fun showWeatherListAndIcon(isRussian: Boolean) {
@@ -112,6 +126,7 @@ class WeatherListFragment : Fragment() {
                         .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
                         .addToBackStack("")
                         .commit()
+                    view?.hideKeyboard()
                 }
             }
         }
@@ -145,8 +160,21 @@ class WeatherListFragment : Fragment() {
         Snackbar.make(this, errorTitle, snackDuration).setAction(setActionName, block).show()
     }
 
+    // Функция-расширение
+    private fun View.showSnackError(
+        errorTitle: String = R.string.snack_bar_error_title.toString(),
+        snackDuration: Int
+    ) {
+        Snackbar.make(this, errorTitle, snackDuration).show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
+/*    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }*/
 }
