@@ -1,5 +1,8 @@
 package com.example.kotlin_gb.utils
 
+import com.example.kotlin_gb.service.DetailService
+import com.google.gson.annotations.SerializedName
+
 class Const {
     companion object {
         const val REQUEST_METHOD = "GET"
@@ -25,11 +28,25 @@ class Const {
 
         const val DETAILS_URL_MALFORMED_EXTRA = "DETAILS_URL_MALFORMED_EXTRA"
 
-
-
+            // weather data
         const val DETAILS_TEMP_EXTRA = "DETAILS_TEMP_EXTRA"
         const val DETAILS_FEELS_LIKE_EXTRA = "DETAILS_FEELS_LIKE_EXTRA"
         const val DETAILS_CONDITION_EXTRA = "DETAILS_CONDITION_EXTRA"
+        const val DETAILS_HUMIDITY_EXTRA = "DETAILS_HUMIDITY_EXTRA"
+        const val DETAILS_PRESSURE_MM_EXTRA = "DETAILS_PRESSURE_MM_EXTRA"
+        const val DETAILS_WIND_SPEED_EXTRA = "DETAILS_WIND_SPEED"
+        const val DETAILS_NOW_DT_EXTRA = "DETAILS_NOW_DT_EXTRA"
+
+
+        const val PROCESS_ERROR = "PROCESS_ERROR"
+        const val TEMP_INVALID = -100
+        const val FEELS_LIKE_INVALID = -100
+        const val HUMIDITY_INVALID = -100
+        const val PRESSURE_MM_INVALID = -100
+        const val WIND_SPEED_INVALID = -100.0
+
+
+
 
 
     }

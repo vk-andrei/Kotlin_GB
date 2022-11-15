@@ -36,6 +36,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".service.DetailService" />
+
     </application>
 
 </manifest>
