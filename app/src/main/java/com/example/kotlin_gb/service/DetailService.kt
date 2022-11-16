@@ -41,6 +41,7 @@ class DetailService(name: String = "DetailService") : IntentService(name) {
 
     private val broadcastIntent = Intent(DETAILS_INTENT_FILTER)
 
+    @Deprecated("Deprecated in Java")
     override fun onHandleIntent(intent: Intent?) {
         if (intent == null) {
             onEmptyIntent()

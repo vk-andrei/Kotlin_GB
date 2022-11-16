@@ -22,10 +22,6 @@ enum class WeatherCondition(val condition:String) {
     THUNDERSTORM("thunderstorm"),
     THUNDERSTORM_WITH_RAIN("thunderstorm-with-rain"),
     THUNDERSTORM_WITH_HAIL("thunderstorm-with-hail"),
-    //NIGHT("night"),
-    //MORNING("morning"),
-    //DAY("day"),
-    //EVENING("evening")
 }
 
 fun getWeatherIcon(condition: String) : Int {

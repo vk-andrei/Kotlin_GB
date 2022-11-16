@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import java.lang.StringBuilder
 
 // (FOR TEST) -> add in manifest - CHANGING AIRPLANE MODE
 class MainBroadcastReceiver : BroadcastReceiver() {

@@ -1,8 +1,5 @@
 package com.example.kotlin_gb.utils
 
-import com.example.kotlin_gb.service.DetailService
-import com.google.gson.annotations.SerializedName
-
 class Const {
     companion object {
         const val REQUEST_METHOD = "GET"

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -66,8 +67,8 @@ class WeatherDetailsFragment : Fragment() {
             when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
                 DETAILS_INTENT_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_DATA_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
-                DETAILS_REQUEST_ERROR_EXTRA -> TODO(PROCESS_ERROR)
-                DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
+                DETAILS_REQUEST_ERROR_EXTRA -> errorRequest(intent)
+                //DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_URL_MALFORMED_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_RESPONSE_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_RESPONSE_SUCCESS_EXTRA -> renderDateWeatherDTO(
@@ -115,45 +116,13 @@ class WeatherDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val weatherBundle = arguments?.let { arg -> arg.getParcelable<Weather>(BUNDLE_EXTRA_WEATHER) }
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA_WEATHER) ?: Weather()
         getWeather()
-
-        /*weatherBundle?.let { localWeather ->
-
-            WeatherLoader.requestWeatherFromYandex(
-                localWeather.city.lat,
-                localWeather.city.lon,
-
-                object : OnYandexWeatherResponse {
-                    override fun onYandexWeatherResponse(weatherDTO: WeatherDTO) {
-                        requireActivity().runOnUiThread {
-                            renderData(localWeather.apply {
-                                temperature = weatherDTO.fact.temp
-                                feelsLike = weatherDTO.fact.feelsLike
-                                condition = weatherDTO.fact.condition
-                                humidity = weatherDTO.fact.humidity
-                                windSpeed = weatherDTO.fact.windSpeed
-                                pressure = weatherDTO.fact.pressureMm
-                                nowDate = weatherDTO.nowDt
-                            })
-                        }
-                    }
-
-                    override fun onFailedResponse() {
-                        Snackbar.make(
-                            binding.root,
-                            "Failed to connect. ResponseCode is not 200",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                    }
-                })
-        }*/
     }
 
     private fun getWeather() = with(binding) {
-        clWeatherDetails.show()
-        flLoadingLayout.hide()
+        clWeatherDetails.hide()
+        flLoadingLayout.show()
         requireActivity().let {
             it.startService(Intent(it, DetailService::class.java).apply {
                 putExtra(LATITUDE_EXTRA, weatherBundle.city.lat)
@@ -162,7 +131,7 @@ class WeatherDetailsFragment : Fragment() {
         }
     }
 
-    // SECOND WAY (with broadcast)
+    // WAY with broadcast
     @RequiresApi(Build.VERSION_CODES.O)
     fun renderDateWeatherDTO(weatherDTO: WeatherDTO) = with(binding) {
         clWeatherDetails.show()
@@ -187,14 +156,9 @@ class WeatherDetailsFragment : Fragment() {
         }
     }
 
-
-    // FIRST WAY (with threads)
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun renderData(weather: Weather) = with(binding) {
-
-        clWeatherDetails.show()
-        flLoadingLayout.hide()
 
         imageConditionIcon.apply {
             setImageResource(getWeatherIcon(weather.condition))
@@ -233,15 +197,17 @@ class WeatherDetailsFragment : Fragment() {
             .format(DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH))
     }
 
+    private fun errorRequest(intent: Intent) {
+        val errorNsg = intent.getStringExtra(DETAILS_REQUEST_ERROR_MESSAGE_EXTRA)
+        Toast.makeText(requireActivity(), "REQUEST_ERROR: $errorNsg", Toast.LENGTH_LONG).show()
+    }
 
-    companion object {
-        private const val BUNDLE_EXTRA_WEATHER = "BUNDLE_EXTRA_WEATHER"
-        fun newInstance(weather: Weather): WeatherDetailsFragment {
+    private fun View.show() {
+        this.visibility = View.VISIBLE
+    }
 
-            return WeatherDetailsFragment().apply {
-                this.arguments = Bundle().apply { putParcelable(BUNDLE_EXTRA_WEATHER, weather) }
-            }
-        }
+    private fun View.hide() {
+        this.visibility = View.GONE
     }
 
     override fun onDestroy() {
@@ -252,11 +218,13 @@ class WeatherDetailsFragment : Fragment() {
         }
     }
 
-    private fun View.show() {
-        this.visibility = View.VISIBLE
-    }
+    companion object {
+        private const val BUNDLE_EXTRA_WEATHER = "BUNDLE_EXTRA_WEATHER"
+        fun newInstance(weather: Weather): WeatherDetailsFragment {
 
-    private fun View.hide() {
-        this.visibility = View.INVISIBLE
+            return WeatherDetailsFragment().apply {
+                this.arguments = Bundle().apply { putParcelable(BUNDLE_EXTRA_WEATHER, weather) }
+            }
+        }
     }
 }
