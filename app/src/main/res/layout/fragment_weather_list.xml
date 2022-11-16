@@ -3,15 +3,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/fon">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_my_coordinates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_my_latitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/border"
+            android:focusable="auto"
+            android:fontFamily="@font/comfortaa_light"
+            android:hint="@string/latitude"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_my_longitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/border"
+            android:fontFamily="@font/comfortaa_light"
+            android:hint="@string/longitude"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_find_with_coordinates"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/blue_light"
+            android:fontFamily="@font/comfortaa_bold"
+            android:padding="5dp"
+            android:text="@string/find"
+            android:textSize="20sp"
+            android:insetTop ="0dp"
+            android:insetBottom ="0dp"
+            android:textStyle="italic" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_weatherList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_my_coordinates"
         tools:listitem="@layout/fragment_weather_list_recycler_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="56dp"
-        app:tint="@null"/>
+        app:tint="@null" />
 
     <FrameLayout
         android:id="@+id/fl_loadingLayout"

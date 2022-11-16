@@ -1,7 +1,6 @@
 package com.example.kotlin_gb.view.weatherlist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_gb.databinding.FragmentWeatherListRecyclerItemBinding
@@ -16,8 +15,8 @@ class WeatherListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding =
-            FragmentWeatherListRecyclerItemBinding.inflate(LayoutInflater.from(parent.context))
-        return WeatherViewHolder(binding.root)
+            FragmentWeatherListRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return WeatherViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
@@ -29,10 +28,13 @@ class WeatherListAdapter(
     }
 
     // inner --> to see "callback"
-    inner class WeatherViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class WeatherViewHolder(binding: FragmentWeatherListRecyclerItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
         fun bind(weather: Weather) {
             val binding = FragmentWeatherListRecyclerItemBinding.bind(itemView)
             binding.tvCityName.text = weather.city.name
+            binding.tvCountryOfCity.text = weather.city.country
             binding.root.setOnClickListener {
                 callback.onCityClick(weather)
             }

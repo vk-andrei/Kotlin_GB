@@ -10,10 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
+import com.example.kotlin_gb.model.City
+import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.utils.Utils.hideKeyboard
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
+
 
 class WeatherListFragment : Fragment() {
 
@@ -40,7 +44,7 @@ class WeatherListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Creating ViewModel
+
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }
@@ -51,6 +55,33 @@ class WeatherListFragment : Fragment() {
             isRussian = !isRussian
             showWeatherListAndIcon(isRussian)
         }
+
+        binding.btnFindWithCoordinates.setOnClickListener {
+            val lat = binding.etMyLatitude.text.toString()
+            val lon = binding.etMyLongitude.text.toString()
+            if (validateInputs(lat, lon)) {
+                val latChecked = lat.trim().toDouble()
+                val lonChecked = lon.trim().toDouble()
+                //TODO round values of lat and lon
+                val weather =
+                    Weather(City("By coordinates", latChecked, lonChecked, "Unknown place"))
+
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .hide(this@WeatherListFragment)
+                    .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
+                    .addToBackStack("")
+                    .commit()
+                view.hideKeyboard()
+
+            } else {
+                view.hideKeyboard()
+                binding.root.showSnackError("Input correct numbers", Snackbar.LENGTH_SHORT)
+            }
+        }
+    }
+
+    private fun validateInputs(lat: String, lon: String): Boolean {
+        return (lat.isNotEmpty() && lon.isNotEmpty())
     }
 
     private fun showWeatherListAndIcon(isRussian: Boolean) {
@@ -71,9 +102,9 @@ class WeatherListFragment : Fragment() {
             is AppState.Error -> {
                 binding.showError()
                 binding.root.showSnackErrorWithAction(
-                    "Error",
+                    getString(R.string.snack_bar_error_title),
                     Snackbar.LENGTH_INDEFINITE,
-                    "Reload"
+                    getString(R.string.snack_bar_reload_title),
                 ) { showWeatherListAndIcon(isRussian) }
             }
             is AppState.Loading -> {
@@ -95,6 +126,7 @@ class WeatherListFragment : Fragment() {
                         .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
                         .addToBackStack("")
                         .commit()
+                    view?.hideKeyboard()
                 }
             }
         }
@@ -120,7 +152,7 @@ class WeatherListFragment : Fragment() {
 
     // Функция-расширение
     private fun View.showSnackErrorWithAction(
-        errorTitle: String,
+        errorTitle: String = R.string.snack_bar_error_title.toString(),
         snackDuration: Int,
         setActionName: String,
         block: (v: View) -> Unit
@@ -128,8 +160,21 @@ class WeatherListFragment : Fragment() {
         Snackbar.make(this, errorTitle, snackDuration).setAction(setActionName, block).show()
     }
 
+    // Функция-расширение
+    private fun View.showSnackError(
+        errorTitle: String = R.string.snack_bar_error_title.toString(),
+        snackDuration: Int
+    ) {
+        Snackbar.make(this, errorTitle, snackDuration).show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
+/*    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }*/
 }

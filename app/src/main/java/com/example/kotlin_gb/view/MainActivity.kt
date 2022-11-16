@@ -1,8 +1,9 @@
-package com.example.kotlin_gb.view.weatherlist
+package com.example.kotlin_gb.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_gb.R
+import com.example.kotlin_gb.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +15,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
-    }
 
+    }
 }
