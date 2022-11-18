@@ -1,4 +1,6 @@
-package com.example.kotlin_gb.model
+package com.example.kotlin_gb.repository
+
+import com.example.kotlin_gb.model.*
 
 class RepositoryLocalImpl : RepositorySingleWeatherGiver, RepositoryMultiWeatherGiver {
     override fun getWeather(lat: Double, lon: Double): Weather {
