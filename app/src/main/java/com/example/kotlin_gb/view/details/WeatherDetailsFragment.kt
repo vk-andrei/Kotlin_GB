@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.kotlin_gb.BuildConfig
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.model.Weather
@@ -21,6 +23,7 @@ import com.example.kotlin_gb.model.dto.FactDTO
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.model.getWeatherIcon
 import com.example.kotlin_gb.service.DetailService
+import com.example.kotlin_gb.utils.Const
 import com.example.kotlin_gb.utils.Const.Companion.DETAILS_CONDITION_EXTRA
 import com.example.kotlin_gb.utils.Const.Companion.DETAILS_DATA_EMPTY_EXTRA
 import com.example.kotlin_gb.utils.Const.Companion.DETAILS_FEELS_LIKE_EXTRA
@@ -38,6 +41,7 @@ import com.example.kotlin_gb.utils.Const.Companion.DETAILS_TEMP_EXTRA
 import com.example.kotlin_gb.utils.Const.Companion.DETAILS_URL_MALFORMED_EXTRA
 import com.example.kotlin_gb.utils.Const.Companion.DETAILS_WIND_SPEED_EXTRA
 import com.example.kotlin_gb.utils.Const.Companion.FEELS_LIKE_INVALID
+import com.example.kotlin_gb.utils.Const.Companion.HTTPS_YANDEX_URL
 import com.example.kotlin_gb.utils.Const.Companion.HUMIDITY_INVALID
 import com.example.kotlin_gb.utils.Const.Companion.LATITUDE_EXTRA
 import com.example.kotlin_gb.utils.Const.Companion.LONGITUDE_EXTRA
@@ -45,7 +49,11 @@ import com.example.kotlin_gb.utils.Const.Companion.PRESSURE_MM_INVALID
 import com.example.kotlin_gb.utils.Const.Companion.PROCESS_ERROR
 import com.example.kotlin_gb.utils.Const.Companion.TEMP_INVALID
 import com.example.kotlin_gb.utils.Const.Companion.WIND_SPEED_INVALID
+import com.example.kotlin_gb.utils.Const.Companion.X_YANDEX_API_KEY
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_weather_details.*
+import okhttp3.*
+import java.io.IOException
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -123,12 +131,50 @@ class WeatherDetailsFragment : Fragment() {
     private fun getWeather() = with(binding) {
         clWeatherDetails.hide()
         flLoadingLayout.show()
-        requireActivity().let {
+        /*requireActivity().let {
             it.startService(Intent(it, DetailService::class.java).apply {
                 putExtra(LATITUDE_EXTRA, weatherBundle.city.lat)
                 putExtra(LONGITUDE_EXTRA, weatherBundle.city.lon)
             })
-        }
+        }*/
+        val client = OkHttpClient() // create client
+        val builder: Request.Builder = Request.Builder() // create builder of request
+        builder.header(X_YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY) // header of our request
+        builder.url("${HTTPS_YANDEX_URL}?lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}") // create URL
+        val request: Request = builder.build() // create request
+        val call: Call = client.newCall(request) // move request in queue and send
+
+        call.enqueue(object : Callback {
+            //Все запросы становятся в очередь, и для каждого вызывается callback с двумя методами, которые
+            //надо обработать: onResponse и onFailure. Внутри мы создаём знакомый нам Handler и
+            //обрабатываем ответы от сервера. Если ответ от сервера пришёл, убеждаемся, что ответ успешен и
+            //непустой, и используем библиотеку Gson для преобразования данных в подходящую нам модель. Не
+            //забываем использовать Handler или аналог, так как ответ всё ещё приходит в рабочем потоке, а не в
+            //основном.
+            val handler: Handler = Handler()
+
+            // if response is come from server
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                val serverResponse = response.body()?.string()
+                if (serverResponse != null && response.isSuccessful) {
+                    handler.post {
+                        val weatherDTO: WeatherDTO =
+                            Gson().fromJson(serverResponse, WeatherDTO::class.java)
+                        renderDateWeatherDTO(weatherDTO)
+                    }
+                } else {
+                    TODO(PROCESS_ERROR)
+                }
+            }
+
+            // Вызывается при сбое в процессе запроса на сервер (на нашей стороне)
+            override fun onFailure(call: Call, e: IOException) {
+                TODO(PROCESS_ERROR)
+            }
+        })
+
+
     }
 
     // WAY with broadcast
