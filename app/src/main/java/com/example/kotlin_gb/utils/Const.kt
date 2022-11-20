@@ -41,10 +41,5 @@ class Const {
         const val HUMIDITY_INVALID = -100
         const val PRESSURE_MM_INVALID = -100
         const val WIND_SPEED_INVALID = -100.0
-
-
-
-
-
     }
 }

@@ -9,6 +9,7 @@ data class FactDTO(
     val feelsLike: Int,
     val condition: String,
     val humidity: Int,
+    @SerializedName("wind_speed")
     val windSpeed: Double,
     @SerializedName("pressure_mm")
     val pressureMm: Int,

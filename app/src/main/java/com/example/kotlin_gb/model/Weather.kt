@@ -38,7 +38,6 @@ fun convertWeatherDTOtoWeather(weatherDTO: WeatherDTO): Weather {
     )
 }
 
-
 // НЕИЗМЕНЯЕМЫЙ СПИСОК!!! listOf
 fun getRussianCities(): List<Weather> {
     return listOf(

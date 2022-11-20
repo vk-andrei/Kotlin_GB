@@ -6,7 +6,6 @@ import com.example.kotlin_gb.model.convertWeatherDTOtoWeather
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.repository.DetailsRepositoryImpl
 import com.example.kotlin_gb.repository.RemoteDataSource
-import com.example.kotlin_gb.utils.Const
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Callback
@@ -53,6 +52,7 @@ class DetailsViewModel(
     private fun checkResponse(serverResponse: String): AppState {
         val weatherDTO: WeatherDTO = Gson().fromJson(serverResponse, WeatherDTO::class.java)
 
+        // TODO почему он пишет, что они не могут быть НУЛ??? (потому что выше проверяли ---->  if (serverResponse != null && response.isSuccessful) ? )
         return if (weatherDTO.fact.temp == null || weatherDTO.fact.feelsLike == null
             || weatherDTO.fact.humidity == null || weatherDTO.fact.pressureMm == null
             || weatherDTO.fact.windSpeed == null || weatherDTO.nowDt == null
