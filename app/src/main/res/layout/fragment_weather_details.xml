@@ -41,6 +41,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_header"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tv_cityName"
                 android:layout_width="wrap_content"
@@ -50,7 +57,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_header"
                 tools:text="Москва" />
 
             <TextView
@@ -213,7 +220,6 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_windSpeedValue"
                 app:layout_constraintTop_toTopOf="@+id/image_iconPressure"
                 tools:text="1004Pa" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,19 +10,22 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.api.load
+import com.bumptech.glide.Glide
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.model.City
 import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.model.getWeatherIcon
-import com.example.kotlin_gb.utils.Const.Companion.HTTPS_YANDEX_URL
 import com.example.kotlin_gb.utils.Utils.hide
 import com.example.kotlin_gb.utils.Utils.show
 import com.example.kotlin_gb.utils.Utils.showSnackErrorWithAction
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.DetailsViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_weather_details.*
+import java.io.File
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -119,6 +122,15 @@ class WeatherDetailsFragment : Fragment() {
         tv_humidityValue.text = String.format("${weather.humidity}%%")
         tv_windSpeedValue.text = String.format("${weather.windSpeed} m/sec")
         tv_pressureValue.text = String.format("${weather.pressure} mmHg")
+
+        //Glide.with(requireActivity()).load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(imgHeader)
+
+        //Picasso.get().load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(imgHeader)
+
+        // Coil:
+        imgHeader.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+        //imgHeader.load(R.drawable......)
+        //imgHeader.load(File("/path/to/image.jpg"))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
