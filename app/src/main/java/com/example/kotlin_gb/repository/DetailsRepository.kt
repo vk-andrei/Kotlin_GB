@@ -1,11 +1,8 @@
 package com.example.kotlin_gb.repository
 
-import okhttp3.Callback
-
-// Этот интерфейс будет обозначать работу с данными на экране DetailsFragment.
-// Здесь всего один метод, который принимает в качестве аргументов строку
-// для запроса на сервер и callback для OkHttp.
+import com.example.kotlin_gb.model.dto.WeatherDTO
+import retrofit2.Callback
 
 interface DetailsRepository {
-    fun getWeatherDetailsFromServer(requestLink: String, callback: Callback)
+    fun getWeatherDetailsFromServer(lat: Double, lon: Double, callback: Callback<WeatherDTO>)
 }

@@ -6,11 +6,9 @@ import com.example.kotlin_gb.model.convertWeatherDTOtoWeather
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.repository.DetailsRepositoryImpl
 import com.example.kotlin_gb.repository.RemoteDataSource
-import com.google.gson.Gson
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-import java.io.IOException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val SERVER_ERROR = "SERVER_ERROR"
 private const val REQUEST_ERROR = "REQUEST_ERROR"
@@ -21,19 +19,20 @@ private const val CORRUPTED_DATA = "CORRUPTED_DATA"
 // запрос на сервер через репозиторий
 
 class DetailsViewModel(
-    private val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
+    val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
     private val detailsRemoteImpl: DetailsRepositoryImpl = DetailsRepositoryImpl(RemoteDataSource())
 ) : ViewModel() {
 
-    fun getLiveData() = detailsLiveData
+    //fun getLiveData() = detailsLiveData
 
-    fun getWeatherDetailsFromServer(requestLink: String) {
-        detailsRemoteImpl.getWeatherDetailsFromServer(requestLink, callback)
+    fun getWeatherFromRemoteSource(lat:Double, lon:Double) {
+        detailsLiveData.value = AppState.Loading
+        detailsRemoteImpl.getWeatherDetailsFromServer(lat, lon, callback)
     }
 
-    private val callback = object : Callback {
-        override fun onResponse(call: Call, response: Response) {
-            val serverResponse = response.body()?.string()
+    private val callback = object : Callback<WeatherDTO> {
+        override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
+            val serverResponse: WeatherDTO? = response.body()
             detailsLiveData.postValue(
                 if (serverResponse != null && response.isSuccessful) {
                     checkResponse(serverResponse)
@@ -43,26 +42,21 @@ class DetailsViewModel(
             )
         }
 
-        override fun onFailure(call: Call, e: IOException) {
-            detailsLiveData.postValue(AppState.Error(Throwable(e.message ?: REQUEST_ERROR)))
+        override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
+            detailsLiveData.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
         }
-
     }
 
-    private fun checkResponse(serverResponse: String): AppState {
-        val weatherDTO: WeatherDTO = Gson().fromJson(serverResponse, WeatherDTO::class.java)
+    private fun checkResponse(serverResponse: WeatherDTO): AppState {
 
         // TODO почему он пишет, что они не могут быть НУЛ??? (потому что выше проверяли ---->  if (serverResponse != null && response.isSuccessful) ? )
-        return if (weatherDTO.fact.temp == null || weatherDTO.fact.feelsLike == null
-            || weatherDTO.fact.humidity == null || weatherDTO.fact.pressureMm == null
-            || weatherDTO.fact.windSpeed == null || weatherDTO.nowDt == null
+        return if (serverResponse.fact.temp == null || serverResponse.fact.feelsLike == null
+            || serverResponse.fact.humidity == null || serverResponse.fact.pressureMm == null
+            || serverResponse.fact.windSpeed == null || serverResponse.nowDt == null
         ) {
             AppState.Error(Throwable(CORRUPTED_DATA))
         } else {
-            AppState.SuccessSingleWeather(convertWeatherDTOtoWeather(weatherDTO))
+            AppState.SuccessSingleWeather(convertWeatherDTOtoWeather(serverResponse))
         }
-
     }
-
-
 }

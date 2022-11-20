@@ -57,10 +57,8 @@ class WeatherDetailsFragment : Fragment() {
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA_WEATHER) ?: Weather()
         city = weatherBundle.city
 
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { it -> renderData(it) })
-        viewModel.getWeatherDetailsFromServer(
-            "${HTTPS_YANDEX_URL}?lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}"
-        )
+        viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer { it -> renderData(it) })
+        viewModel.getWeatherFromRemoteSource(city.lat, city.lon)
         //TODO if answer too long --> Toast ERROR
     }
 
@@ -74,11 +72,7 @@ class WeatherDetailsFragment : Fragment() {
                     getString(R.string.snack_bar_error_title),
                     Snackbar.LENGTH_INDEFINITE,
                     getString(R.string.snack_bar_reload_title)
-                ) {
-                    viewModel.getWeatherDetailsFromServer(
-                        "${HTTPS_YANDEX_URL}?lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}"
-                    )
-                }
+                ) { viewModel.getWeatherFromRemoteSource(city.lat, city.lon) }
             }
             is AppState.Loading -> {
                 binding.clWeatherDetails.hide()
@@ -132,7 +126,6 @@ class WeatherDetailsFragment : Fragment() {
         return OffsetDateTime.parse(strDate)
             .format(DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH))
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
