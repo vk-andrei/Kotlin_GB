@@ -1,8 +1,10 @@
 package com.example.kotlin_gb.model
 
-import android.os.Parcelable
 import com.example.kotlin_gb.model.dto.WeatherDTO
-import kotlinx.android.parcel.Parcelize
+
+import android.os.Parcelable
+//import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 //     id 'kotlin-android-extensions'   <-- for Parcelize in gradle
 

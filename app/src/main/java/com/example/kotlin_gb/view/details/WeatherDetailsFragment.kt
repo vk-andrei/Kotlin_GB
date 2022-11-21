@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.api.load
-import com.bumptech.glide.Glide
+//import com.bumptech.glide.Glide
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherDetailsBinding
 import com.example.kotlin_gb.model.City
@@ -23,8 +23,8 @@ import com.example.kotlin_gb.utils.Utils.showSnackErrorWithAction
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.DetailsViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_weather_details.*
+//import com.squareup.picasso.Picasso
+//import kotlinx.android.synthetic.main.fragment_weather_details.*
 import java.io.File
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -110,18 +110,18 @@ class WeatherDetailsFragment : Fragment() {
             alpha = 0.9f
         }
 
-        tv_cityName.text = city.name
-        tv_cityCountry.text = city.country
+        tvCityName.text = city.name
+        tvCityCountry.text = city.country
         // TODO round coordinates!!!
-        tv_cityCoordinates.text = "lat:${city.lat}, lon:${city.lon}"
-        tv_condition.text = weather.condition
+        tvCityCoordinates.text = "lat:${city.lat}, lon:${city.lon}"
+        tvCondition.text = weather.condition
 
-        tv_temperatureValue.text = String.format("${weather.temperature}°")
-        tv_feelsLikeValue.text = String.format("${weather.feelsLike}°")
-        tv_dayOfWeek.text = formatDateStr(weather.nowDate)
-        tv_humidityValue.text = String.format("${weather.humidity}%%")
-        tv_windSpeedValue.text = String.format("${weather.windSpeed} m/sec")
-        tv_pressureValue.text = String.format("${weather.pressure} mmHg")
+        tvTemperatureValue.text = String.format("${weather.temperature}°")
+        tvFeelsLikeValue.text = String.format("${weather.feelsLike}°")
+        tvDayOfWeek.text = formatDateStr(weather.nowDate)
+        tvHumidityValue.text = String.format("${weather.humidity}%%")
+        tvWindSpeedValue.text = String.format("${weather.windSpeed} m/sec")
+        tvPressureValue.text = String.format("${weather.pressure} mmHg")
 
         //Glide.with(requireActivity()).load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(imgHeader)
 
