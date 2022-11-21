@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.kotlin_gb"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -49,7 +49,7 @@ dependencies {
 
     // LIBRARY GlideToVectorYou
     // (not forget to add in main gradle --> maven { url 'https://jitpack.io' }
-    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
+    implementation 'com.github.corouteam:GlideToVectorYou:2.0.0'
 
     // LIBRARY Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
