@@ -76,4 +76,6 @@ dependencies {
     // LIBRARY Coil
     implementation 'io.coil-kt:coil:0.11.0'
 
+    // LIBRARY GlideToVectorYou
+
 }
