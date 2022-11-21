@@ -78,7 +78,7 @@ dependencies {
 
     // LIBRARY GlideToVectorYou
     // (not forget to add in main gradle --> maven { url 'https://jitpack.io' }
-    implementation 'com.github.corouteam:GlideToVectorYou:v.2.0.0'
+    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
     implementation 'com.github.User:Repo:Tag'
 
 }
