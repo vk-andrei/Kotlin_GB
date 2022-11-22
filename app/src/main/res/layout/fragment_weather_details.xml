@@ -88,10 +88,19 @@
                 android:layout_marginTop="@dimen/margin_15_dp"
                 android:textSize="@dimen/condition_text_size"
                 android:textStyle="bold|italic"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/image_conditionIconSVGSmall"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_dayOfWeek"
                 tools:text="Cloudy" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_conditionIconSVGSmall"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_condition"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_condition"
+                tools:src="@drawable/condition_none" />
 
             <TextView
                 android:id="@+id/tv_temperatureLabel"
@@ -158,6 +167,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_temperatureValue"
                 tools:src="@drawable/condition_none" />
+
+            <!--<androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_conditionIconSVG"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="@dimen/margin_15_dp"
+
+                app:layout_constraintStart_toStartOf="@+id/image_conditionIcon"
+                app:layout_constraintTop_toBottomOf="@+id/image_conditionIcon"
+                tools:src="@drawable/condition_none" />-->
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_iconHumidity"

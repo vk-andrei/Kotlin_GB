@@ -17,7 +17,8 @@ data class Weather(
     var nowDate: String = "not information",
     var humidity: Int = 0,
     var windSpeed: Double = 0.0,
-    var pressure: Int = 0
+    var pressure: Int = 0,
+    val icon: String = "bkn_n"
 ) : Parcelable
 
 @Parcelize
@@ -36,7 +37,8 @@ fun convertWeatherDTOtoWeather(weatherDTO: WeatherDTO): Weather {
         nowDate = weatherDTO.nowDt,
         humidity = weatherDTO.fact.humidity,
         windSpeed = weatherDTO.fact.windSpeed,
-        pressure = weatherDTO.fact.pressureMm
+        pressure = weatherDTO.fact.pressureMm,
+        icon = weatherDTO.fact.icon
     )
 }
 

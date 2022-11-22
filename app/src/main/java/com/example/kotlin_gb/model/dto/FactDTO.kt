@@ -13,4 +13,5 @@ data class FactDTO(
     val windSpeed: Double,
     @SerializedName("pressure_mm")
     val pressureMm: Int,
+    val icon: String
 )

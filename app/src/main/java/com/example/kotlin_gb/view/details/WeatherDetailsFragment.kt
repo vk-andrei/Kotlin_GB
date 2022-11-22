@@ -1,6 +1,7 @@
 package com.example.kotlin_gb.view.details
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.kotlin_gb.utils.Utils.show
 import com.example.kotlin_gb.utils.Utils.showSnackErrorWithAction
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.DetailsViewModel
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.material.snackbar.Snackbar
 //import com.squareup.picasso.Picasso
 //import kotlinx.android.synthetic.main.fragment_weather_details.*
@@ -57,7 +59,11 @@ class WeatherDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA_WEATHER) ?: Weather()
+        weatherBundle = if (Build.VERSION.SDK_INT >= 33) {
+            arguments?.getParcelable(BUNDLE_EXTRA_WEATHER, Weather::class.java) ?: Weather()
+        } else {
+            arguments?.getParcelable<Weather>(BUNDLE_EXTRA_WEATHER) ?: Weather()
+        }
         city = weatherBundle.city
 
         viewModel.detailsLiveData.observe(viewLifecycleOwner, Observer { it -> renderData(it) })
@@ -93,6 +99,15 @@ class WeatherDetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setWeather(weather: Weather) = with(binding) {
+
+        weather.icon.let {
+            GlideToVectorYou.justLoadImage(
+                activity,
+                Uri.parse("https://yastatic.net/weather/i/icons/blueye/color/svg/${it}.svg"),
+                imageConditionIconSVGSmall
+            )
+        }
+
         imageConditionIcon.apply {
             setImageResource(getWeatherIcon(weather.condition))
             alpha = 0.7f
@@ -124,9 +139,7 @@ class WeatherDetailsFragment : Fragment() {
         tvPressureValue.text = String.format("${weather.pressure} mmHg")
 
         //Glide.with(requireActivity()).load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(imgHeader)
-
         //Picasso.get().load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(imgHeader)
-
         // Coil:
         imgHeader.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
         //imgHeader.load(R.drawable......)
