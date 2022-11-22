@@ -4,6 +4,9 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.kotlin_gb.R
+import com.example.kotlin_gb.model.City
+import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.room.HistoryEntity
 import com.google.android.material.snackbar.Snackbar
 
 object Utils {
@@ -36,6 +39,17 @@ object Utils {
         snackDuration: Int
     ) {
         Snackbar.make(this, errorTitle, snackDuration).show()
+    }
+
+    // Так как DAO работает с Entity, надо написать два дополнительных метода для конвертации данных
+    fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>): List<Weather> {
+        return entityList.map {
+            Weather(City(it.city, 0.0, 0.0), it.temperature, 0, it.condition)
+        }
+    }
+
+    fun convertWeatherToEntity(weather: Weather): HistoryEntity {
+        return HistoryEntity(0, weather.city.toString(), weather.temperature, weather.condition)
     }
 
 }
