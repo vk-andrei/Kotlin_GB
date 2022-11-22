@@ -49,10 +49,6 @@ android {
 
 dependencies {
 
-    // LIBRARY GlideToVectorYou
-    // (not forget to add in main gradle --> maven { url 'https://jitpack.io' }
-    implementation 'com.github.corouteam:GlideToVectorYou:2.0.0'
-
     // LIBRARY Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -86,5 +82,13 @@ dependencies {
 
     // LIBRARY Coil
     implementation 'io.coil-kt:coil:0.11.0'
+
+    // LIBRARY GlideToVectorYou
+    // (not forget to add in main gradle --> maven { url 'https://jitpack.io' }
+    implementation 'com.github.corouteam:GlideToVectorYou:2.0.0'
+
+    // LIBRARY Room
+    implementation 'androidx.room:room-runtime:2.4.3'
+    kapt 'androidx.room:room-compiler:2.4.3'
 
 }
