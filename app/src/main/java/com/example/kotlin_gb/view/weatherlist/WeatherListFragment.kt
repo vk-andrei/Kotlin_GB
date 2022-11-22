@@ -34,7 +34,8 @@ class WeatherListFragment : Fragment() {
         }
 
     private lateinit var viewModel: WeatherListViewModel
-    private var isRussian = true
+
+    private lateinit var citiesAreaKey: String
 
     companion object {
         fun newInstance() = WeatherListFragment()
@@ -51,15 +52,27 @@ class WeatherListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        citiesAreaKey = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            .getString(LIST_OF_CITIES_KEY, RUSSIAN_KEY)
+            .toString()
+
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }
 
-        showListOfCities()
+        showWeatherListAndIcon(citiesAreaKey)
 
         binding.fab.setOnClickListener {
-            isRussian = !isRussian
-            showWeatherListAndIcon(isRussian)
+            when (citiesAreaKey) {
+                RUSSIAN_KEY -> {
+                    citiesAreaKey = WORLD_KEY
+                    showWeatherListAndIcon(citiesAreaKey)
+                }
+                WORLD_KEY -> {
+                    citiesAreaKey = RUSSIAN_KEY
+                    showWeatherListAndIcon(citiesAreaKey)
+                }
+            }
         }
 
         binding.btnFindWithCoordinates.setOnClickListener {
@@ -86,15 +99,17 @@ class WeatherListFragment : Fragment() {
         }
     }
 
-    // Look at our saved Preferences:
-    private fun showListOfCities() {
-        requireActivity().let {
-            if (it.getPreferences(Context.MODE_PRIVATE)
-                    .getString(LIST_OF_CITIES_KEY, RUSSIAN_KEY) == RUSSIAN_KEY
-            ) {
+    private fun showWeatherListAndIcon(citiesArea: String) {
+        when (citiesArea) {
+            RUSSIAN_KEY -> {
                 viewModel.getRussianList()
-            } else {
+                binding.fab
+                    .setImageResource(R.drawable.flag_russia)
+            }
+            WORLD_KEY -> {
                 viewModel.getWorldList()
+                binding.fab
+                    .setImageResource(R.drawable.flag_world)
             }
         }
     }
@@ -102,23 +117,6 @@ class WeatherListFragment : Fragment() {
     private fun validateInputs(lat: String, lon: String): Boolean {
         //TODO check input values for correct
         return (lat.isNotEmpty() && lon.isNotEmpty())
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    private fun showWeatherListAndIcon(isRussian: Boolean) {
-        if (isRussian) {
-            viewModel.getRussianList()
-            binding.fab.apply {
-                setImageResource(R.drawable.flag_russia)
-            }
-            requireActivity().getPreferences(Context.MODE_PRIVATE).edit()
-                .putString(LIST_OF_CITIES_KEY, RUSSIAN_KEY).apply()
-        } else {
-            viewModel.getWorldList()
-            binding.fab.setImageResource(R.drawable.flag_world)
-            requireActivity().getPreferences(Context.MODE_PRIVATE).edit()
-                .putString(LIST_OF_CITIES_KEY, WORLD_KEY).apply()
-        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -130,7 +128,7 @@ class WeatherListFragment : Fragment() {
                     getString(R.string.snack_bar_error_title),
                     Snackbar.LENGTH_INDEFINITE,
                     getString(R.string.snack_bar_reload_title),
-                ) { showWeatherListAndIcon(isRussian) }
+                ) { showWeatherListAndIcon(citiesAreaKey) }
             }
             is AppState.Loading -> {
                 binding.loading()
@@ -174,6 +172,12 @@ class WeatherListFragment : Fragment() {
     private fun FragmentWeatherListBinding.showError() {
         this.flLoadingLayout.visibility = View.GONE
         this.fab.visibility = View.GONE
+    }
+
+    override fun onStop() {
+        requireActivity().getPreferences(Context.MODE_PRIVATE).edit()
+            .putString(LIST_OF_CITIES_KEY, citiesAreaKey).apply()
+        super.onStop()
     }
 
     override fun onDestroy() {
