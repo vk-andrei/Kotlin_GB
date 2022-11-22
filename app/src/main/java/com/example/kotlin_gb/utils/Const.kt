@@ -41,5 +41,11 @@ class Const {
         const val HUMIDITY_INVALID = -100
         const val PRESSURE_MM_INVALID = -100
         const val WIND_SPEED_INVALID = -100.0
+
+        // sharedPref
+        const val LIST_OF_CITIES_KEY = "LIST_OF_CITIES_KEY"
+        const val RUSSIAN_KEY = "RUSSIAN_KEY"
+        const val WORLD_KEY = "WORLD_KEY"
+
     }
 }

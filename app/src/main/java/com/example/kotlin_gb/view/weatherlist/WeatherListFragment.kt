@@ -1,6 +1,7 @@
 package com.example.kotlin_gb.view.weatherlist
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,9 @@ import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.City
 import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.utils.Const.Companion.LIST_OF_CITIES_KEY
+import com.example.kotlin_gb.utils.Const.Companion.RUSSIAN_KEY
+import com.example.kotlin_gb.utils.Const.Companion.WORLD_KEY
 import com.example.kotlin_gb.utils.Utils.hideKeyboard
 import com.example.kotlin_gb.utils.Utils.showSnackError
 import com.example.kotlin_gb.utils.Utils.showSnackErrorWithAction
@@ -51,7 +55,7 @@ class WeatherListFragment : Fragment() {
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }
 
-        viewModel.getRussianList()
+        showListOfCities()
 
         binding.fab.setOnClickListener {
             isRussian = !isRussian
@@ -82,20 +86,38 @@ class WeatherListFragment : Fragment() {
         }
     }
 
+    // Look at our saved Preferences:
+    private fun showListOfCities() {
+        requireActivity().let {
+            if (it.getPreferences(Context.MODE_PRIVATE)
+                    .getString(LIST_OF_CITIES_KEY, RUSSIAN_KEY) == RUSSIAN_KEY
+            ) {
+                viewModel.getRussianList()
+            } else {
+                viewModel.getWorldList()
+            }
+        }
+    }
+
     private fun validateInputs(lat: String, lon: String): Boolean {
         //TODO check input values for correct
         return (lat.isNotEmpty() && lon.isNotEmpty())
     }
 
+    @SuppressLint("CommitPrefEdits")
     private fun showWeatherListAndIcon(isRussian: Boolean) {
         if (isRussian) {
             viewModel.getRussianList()
             binding.fab.apply {
                 setImageResource(R.drawable.flag_russia)
             }
+            requireActivity().getPreferences(Context.MODE_PRIVATE).edit()
+                .putString(LIST_OF_CITIES_KEY, RUSSIAN_KEY).apply()
         } else {
             viewModel.getWorldList()
             binding.fab.setImageResource(R.drawable.flag_world)
+            requireActivity().getPreferences(Context.MODE_PRIVATE).edit()
+                .putString(LIST_OF_CITIES_KEY, WORLD_KEY).apply()
         }
     }
 

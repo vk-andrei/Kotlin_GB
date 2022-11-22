@@ -46,7 +46,7 @@ class WeatherListViewModel(
     // postValue - обновление данных из рабочего потока
     private fun sendRequest(location: Location) {
         liveData.value = AppState.Loading
-        if ((0..9).shuffled().first() == 1) {
+        if ((0..20).shuffled().first() == 1) {
             Thread {
                 Thread.sleep(1000L)
                 liveData.postValue(
