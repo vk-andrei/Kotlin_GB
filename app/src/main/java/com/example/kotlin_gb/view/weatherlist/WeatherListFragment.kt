@@ -13,11 +13,13 @@ import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.City
 import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.utils.Utils.hideKeyboard
+import com.example.kotlin_gb.utils.Utils.showSnackError
+import com.example.kotlin_gb.utils.Utils.showSnackErrorWithAction
+import com.example.kotlin_gb.view.details.OnCityClickable
 import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
-
 
 class WeatherListFragment : Fragment() {
 
@@ -81,6 +83,7 @@ class WeatherListFragment : Fragment() {
     }
 
     private fun validateInputs(lat: String, lon: String): Boolean {
+        //TODO check input values for correct
         return (lat.isNotEmpty() && lon.isNotEmpty())
     }
 
@@ -118,16 +121,17 @@ class WeatherListFragment : Fragment() {
                 val result = appState.weatherListData
                 val rv = binding.rvWeatherList
                 rv.layoutManager = LinearLayoutManager(requireActivity())
-                rv.adapter = WeatherListAdapter(
-                    result
-                ) { weather ->
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .hide(this@WeatherListFragment)
-                        .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
-                        .addToBackStack("")
-                        .commit()
-                    view?.hideKeyboard()
-                }
+
+                rv.adapter = WeatherListAdapter(result, object : OnCityClickable {
+                    override fun onCityClick(weather: Weather) {
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .hide(this@WeatherListFragment)
+                            .add(R.id.container, WeatherDetailsFragment.newInstance(weather))
+                            .addToBackStack("")
+                            .commit()
+                        view?.hideKeyboard()
+                    }
+                })
             }
         }
     }
@@ -150,31 +154,8 @@ class WeatherListFragment : Fragment() {
         this.fab.visibility = View.GONE
     }
 
-    // Функция-расширение
-    private fun View.showSnackErrorWithAction(
-        errorTitle: String = R.string.snack_bar_error_title.toString(),
-        snackDuration: Int,
-        setActionName: String,
-        block: (v: View) -> Unit
-    ) {
-        Snackbar.make(this, errorTitle, snackDuration).setAction(setActionName, block).show()
-    }
-
-    // Функция-расширение
-    private fun View.showSnackError(
-        errorTitle: String = R.string.snack_bar_error_title.toString(),
-        snackDuration: Int
-    ) {
-        Snackbar.make(this, errorTitle, snackDuration).show()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
-/*    private fun View.hideKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
-    }*/
 }

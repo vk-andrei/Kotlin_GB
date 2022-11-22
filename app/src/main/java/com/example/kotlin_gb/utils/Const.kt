@@ -1,8 +1,5 @@
 package com.example.kotlin_gb.utils
 
-import com.example.kotlin_gb.service.DetailService
-import com.google.gson.annotations.SerializedName
-
 class Const {
     companion object {
         const val REQUEST_METHOD = "GET"
@@ -44,10 +41,5 @@ class Const {
         const val HUMIDITY_INVALID = -100
         const val PRESSURE_MM_INVALID = -100
         const val WIND_SPEED_INVALID = -100.0
-
-
-
-
-
     }
 }

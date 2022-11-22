@@ -1,7 +1,10 @@
 package com.example.kotlin_gb.model
 
+import com.example.kotlin_gb.model.dto.WeatherDTO
+
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+//import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 //     id 'kotlin-android-extensions'   <-- for Parcelize in gradle
 
@@ -14,8 +17,9 @@ data class Weather(
     var nowDate: String = "not information",
     var humidity: Int = 0,
     var windSpeed: Double = 0.0,
-    var pressure: Int = 0
-    ) : Parcelable
+    var pressure: Int = 0,
+    val icon: String = "bkn_n"
+) : Parcelable
 
 @Parcelize
 data class City(
@@ -24,6 +28,19 @@ data class City(
     val lon: Double,
     val country: String = "Russia"
 ) : Parcelable
+
+fun convertWeatherDTOtoWeather(weatherDTO: WeatherDTO): Weather {
+    return Weather(
+        temperature = weatherDTO.fact.temp,
+        feelsLike = weatherDTO.fact.feelsLike,
+        condition = weatherDTO.fact.condition,
+        nowDate = weatherDTO.nowDt,
+        humidity = weatherDTO.fact.humidity,
+        windSpeed = weatherDTO.fact.windSpeed,
+        pressure = weatherDTO.fact.pressureMm,
+        icon = weatherDTO.fact.icon
+    )
+}
 
 // НЕИЗМЕНЯЕМЫЙ СПИСОК!!! listOf
 fun getRussianCities(): List<Weather> {

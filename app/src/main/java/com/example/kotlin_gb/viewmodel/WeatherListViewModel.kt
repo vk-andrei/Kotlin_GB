@@ -2,7 +2,11 @@ package com.example.kotlin_gb.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin_gb.model.*
+import com.example.kotlin_gb.model.Location
+import com.example.kotlin_gb.repository.RepositoryLocalImpl
+import com.example.kotlin_gb.repository.RepositoryMultiWeatherGiver
+import com.example.kotlin_gb.repository.RepositoryRemoteImpl
+import com.example.kotlin_gb.repository.RepositorySingleWeatherGiver
 
 class WeatherListViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
