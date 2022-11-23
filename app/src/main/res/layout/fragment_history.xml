@@ -15,9 +15,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!--tools:listitem="@layout/fragment_weather_list_recycler_item"-->
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/fragment_history_recycler_item" />
 
 
     <include
