@@ -100,6 +100,9 @@ class WeatherDetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setWeather(weather: Weather) = with(binding) {
 
+        // Сохраняем новые данные в нашу БД
+        saveCity(city, weather)
+
         weather.icon.let {
             GlideToVectorYou.justLoadImage(
                 activity,
@@ -150,6 +153,17 @@ class WeatherDetailsFragment : Fragment() {
     fun formatDateStr(strDate: String?): String? {
         return OffsetDateTime.parse(strDate)
             .format(DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH))
+    }
+
+    private fun saveCity(city: City, weather: Weather) {
+        viewModel.saveCityToDB(
+            Weather(
+                city,
+                weather.temperature,
+                weather.feelsLike,
+                weather.condition
+            )
+        )
     }
 
     override fun onDestroy() {
