@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -161,7 +162,12 @@ class WeatherDetailsFragment : Fragment() {
                 city,
                 weather.temperature,
                 weather.feelsLike,
-                weather.condition
+                weather.condition,
+                "",
+                0,
+                0.0,
+                0,
+                weather.icon
             )
         )
     }

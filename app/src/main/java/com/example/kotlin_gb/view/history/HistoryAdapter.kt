@@ -1,5 +1,7 @@
 package com.example.kotlin_gb.view.history
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentHistoryRecyclerItemBinding
 import com.example.kotlin_gb.model.Weather
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 
 // Адаптер для RecyclerView абсолютно стандартный. В методе bind отображаем элемент списка
 // через объединение данных и вешаем listener для наглядности. Метод setData добавляет данные для
@@ -16,10 +19,10 @@ import com.example.kotlin_gb.model.Weather
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecycleItemViewHolder>() {
 
-    private var data: List<Weather> = arrayListOf()
+    private var dataWeatherHistoryArray: List<Weather> = arrayListOf()
 
     fun setData(data: List<Weather>) {
-        this.data = data
+        this.dataWeatherHistoryArray = data
         notifyDataSetChanged()
     }
 
@@ -30,19 +33,31 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecycleItemViewHolder
     }
 
     override fun onBindViewHolder(holder: RecycleItemViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(dataWeatherHistoryArray[position])
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return dataWeatherHistoryArray.size
     }
 
     inner class RecycleItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = FragmentHistoryRecyclerItemBinding.bind(view)
 
-        fun bind(data: Weather) = with(binding) {
-            binding.tvCountryOfCityHistory.text = "${data.city.country}"
-            binding.tvCityNameHistory.text = "${data.city.name}"
+        fun bind(dataHistoryWeather: Weather) = with(binding) {
+            binding.tvCityNameHistory.text = dataHistoryWeather.city.name
+            binding.tvCountryOfCityHistory.text = dataHistoryWeather.city.country
+            binding.tvTemperature.text = "${dataHistoryWeather.temperature}°C"
+            binding.tvCondition.text = dataHistoryWeather.condition
+
+            Log.d("TAG", "dataHistoryWeather.icon = ${dataHistoryWeather.icon}")
+            GlideToVectorYou.init().with(ivIconCondition.context).load(
+                Uri.parse(dataHistoryWeather.icon), ivIconCondition)
+
+
+/*
+            GlideToVectorYou.init().with(imageCondition.context)
+                .load(Uri.parse(weather.image), imageCondition);
+*/
 
             //TODO setOnclick
         }

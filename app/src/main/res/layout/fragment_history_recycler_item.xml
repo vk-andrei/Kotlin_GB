@@ -2,47 +2,91 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_history_recycler_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:backgroundTint="@color/blue_light"
     app:cardCornerRadius="15dp"
+    app:cardElevation="2dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp">
 
-        <TextView
-            android:id="@+id/tv_city_name_history"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/comfortaa_light"
-            android:text="@string/default_city_name"
-            android:textColor="#000"
-            android:textSize="@dimen/city_list_name_size"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_country_of_city_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/comfortaa_light"
-            android:text="@string/default_country_of_city_name"
-            android:textColor="#272727"
-            android:textSize="@dimen/city_list_name_country_of_city_size"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_city_name_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_light"
+                android:text="@string/default_city_name"
+                android:textColor="#000"
+                android:textSize="@dimen/city_list_name_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/tv_country_of_city_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_light"
+                android:text="@string/default_country_of_city_name"
+                android:textColor="#272727"
+                android:textSize="@dimen/city_list_name_country_of_city_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/tv_city_name_history"
+                app:layout_constraintTop_toBottomOf="@id/tv_city_name_history" />
+
+            <FrameLayout
+                android:id="@+id/fl_for_icon_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_icon_condition"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    tools:src="@drawable/condition_none" />
+
+                <TextView
+                    android:id="@+id/tv_temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:paddingEnd="5dp"
+                    android:textSize="25sp"
+                    android:textStyle="bold|italic"
+                    tools:text="-20°" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="rain with snow" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
 
 </androidx.cardview.widget.CardView>

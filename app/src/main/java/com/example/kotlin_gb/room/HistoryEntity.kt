@@ -13,6 +13,8 @@ class HistoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long, // Auto generating
     val city: String,
+    val country: String,
     val temperature: Int,
-    val condition: String
+    val condition: String,
+    val icon: String
 )

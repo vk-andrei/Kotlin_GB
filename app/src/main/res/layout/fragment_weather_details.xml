@@ -20,12 +20,6 @@
             android:id="@+id/includedLoadingLayout"
             layout="@layout/loading_layout" />
 
-     <!--   <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="visible" />-->
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
