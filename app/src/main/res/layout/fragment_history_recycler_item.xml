@@ -18,11 +18,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_icon_condition"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/condition_none" />
 
             <TextView
                 android:id="@+id/tv_city_name_history"
@@ -48,32 +59,6 @@
                 app:layout_constraintStart_toStartOf="@id/tv_city_name_history"
                 app:layout_constraintTop_toBottomOf="@id/tv_city_name_history" />
 
-            <FrameLayout
-                android:id="@+id/fl_for_icon_condition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/iv_icon_condition"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    tools:src="@drawable/condition_none" />
-
-                <TextView
-                    android:id="@+id/tv_temperature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:paddingEnd="5dp"
-                    android:textSize="25sp"
-                    android:textStyle="bold|italic"
-                    tools:text="-20°" />
-
-            </FrameLayout>
-
             <TextView
                 android:id="@+id/tv_condition"
                 android:layout_width="wrap_content"
@@ -84,6 +69,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="rain with snow" />
+
+            <TextView
+                android:id="@+id/tv_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:paddingEnd="5dp"
+                android:shadowRadius="10"
+                android:textSize="25sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="-20°" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
