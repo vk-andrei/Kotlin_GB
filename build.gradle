@@ -4,16 +4,6 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
 }
 
-// fro GlideToVectorYou (downloading SVG pictures)
-// don't forget to delete dependencyResolutionManagement in settings.gradle
-/*allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
-}*/
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

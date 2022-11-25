@@ -14,23 +14,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottomNav.setOnItemReselectedListener{
+        bottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.Home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, WeatherListFragment.newInstance()).commit()
+                        .replace(R.id.container, WeatherListFragment.newInstance())
+                        .addToBackStack("").commit()
+                    return@setOnNavigationItemSelectedListener true
                 }
                 R.id.History -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, HistoryFragment.newInstance()).commit()
+                        .replace(R.id.container, HistoryFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                    return@setOnNavigationItemSelectedListener true
                 }
             }
+            return@setOnNavigationItemSelectedListener true
         }
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
-
     }
 }
