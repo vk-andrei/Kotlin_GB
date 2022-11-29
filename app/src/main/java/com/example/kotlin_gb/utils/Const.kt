@@ -1,5 +1,8 @@
 package com.example.kotlin_gb.utils
 
+import android.net.Uri
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
+
 class Const {
     companion object {
         const val REQUEST_METHOD = "GET"
@@ -41,5 +44,12 @@ class Const {
         const val HUMIDITY_INVALID = -100
         const val PRESSURE_MM_INVALID = -100
         const val WIND_SPEED_INVALID = -100.0
+
+        // sharedPref
+        const val LIST_OF_CITIES_KEY = "LIST_OF_CITIES_KEY"
+        const val RUSSIAN_KEY = "RUSSIAN_KEY"
+        const val WORLD_KEY = "WORLD_KEY"
+
+        const val YANDEX_API_SVG_ICON_URL = "https://yastatic.net/weather/i/icons/funky/dark/"
     }
 }
