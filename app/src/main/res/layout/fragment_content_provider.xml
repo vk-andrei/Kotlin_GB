@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fon"
-    tools:context=".view.contacts.ContentProviderForContactsFragment">
+    tools:context=".view.contacts.ContentProviderFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/ll_containerForContacts"
