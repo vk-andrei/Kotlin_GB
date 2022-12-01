@@ -1,6 +1,7 @@
 package com.example.kotlin_gb.view.weatherlist
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,9 @@ import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
 import com.example.kotlin_gb.model.City
 import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.utils.Const.Companion.LIST_OF_CITIES_KEY
+import com.example.kotlin_gb.utils.Const.Companion.RUSSIAN_KEY
+import com.example.kotlin_gb.utils.Const.Companion.WORLD_KEY
 import com.example.kotlin_gb.utils.Utils.hideKeyboard
 import com.example.kotlin_gb.utils.Utils.showSnackError
 import com.example.kotlin_gb.utils.Utils.showSnackErrorWithAction
@@ -30,7 +34,8 @@ class WeatherListFragment : Fragment() {
         }
 
     private lateinit var viewModel: WeatherListViewModel
-    private var isRussian = true
+
+    private lateinit var citiesAreaKey: String
 
     companion object {
         fun newInstance() = WeatherListFragment()
@@ -47,15 +52,27 @@ class WeatherListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        citiesAreaKey = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            .getString(LIST_OF_CITIES_KEY, RUSSIAN_KEY)
+            .toString()
+
         viewModel = ViewModelProvider(this)[WeatherListViewModel::class.java]
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { it -> renderData(it) }
 
-        viewModel.getRussianList()
+        showWeatherListAndIcon(citiesAreaKey)
 
         binding.fab.setOnClickListener {
-            isRussian = !isRussian
-            showWeatherListAndIcon(isRussian)
+            when (citiesAreaKey) {
+                RUSSIAN_KEY -> {
+                    citiesAreaKey = WORLD_KEY
+                    showWeatherListAndIcon(citiesAreaKey)
+                }
+                WORLD_KEY -> {
+                    citiesAreaKey = RUSSIAN_KEY
+                    showWeatherListAndIcon(citiesAreaKey)
+                }
+            }
         }
 
         binding.btnFindWithCoordinates.setOnClickListener {
@@ -82,21 +99,24 @@ class WeatherListFragment : Fragment() {
         }
     }
 
+    private fun showWeatherListAndIcon(citiesArea: String) {
+        when (citiesArea) {
+            RUSSIAN_KEY -> {
+                viewModel.getRussianList()
+                binding.fab
+                    .setImageResource(R.drawable.flag_russia)
+            }
+            WORLD_KEY -> {
+                viewModel.getWorldList()
+                binding.fab
+                    .setImageResource(R.drawable.flag_world)
+            }
+        }
+    }
+
     private fun validateInputs(lat: String, lon: String): Boolean {
         //TODO check input values for correct
         return (lat.isNotEmpty() && lon.isNotEmpty())
-    }
-
-    private fun showWeatherListAndIcon(isRussian: Boolean) {
-        if (isRussian) {
-            viewModel.getRussianList()
-            binding.fab.apply {
-                setImageResource(R.drawable.flag_russia)
-            }
-        } else {
-            viewModel.getWorldList()
-            binding.fab.setImageResource(R.drawable.flag_world)
-        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -108,7 +128,7 @@ class WeatherListFragment : Fragment() {
                     getString(R.string.snack_bar_error_title),
                     Snackbar.LENGTH_INDEFINITE,
                     getString(R.string.snack_bar_reload_title),
-                ) { showWeatherListAndIcon(isRussian) }
+                ) { showWeatherListAndIcon(citiesAreaKey) }
             }
             is AppState.Loading -> {
                 binding.loading()
@@ -152,6 +172,12 @@ class WeatherListFragment : Fragment() {
     private fun FragmentWeatherListBinding.showError() {
         this.flLoadingLayout.visibility = View.GONE
         this.fab.visibility = View.GONE
+    }
+
+    override fun onStop() {
+        requireActivity().getPreferences(Context.MODE_PRIVATE).edit()
+            .putString(LIST_OF_CITIES_KEY, citiesAreaKey).apply()
+        super.onStop()
     }
 
     override fun onDestroy() {

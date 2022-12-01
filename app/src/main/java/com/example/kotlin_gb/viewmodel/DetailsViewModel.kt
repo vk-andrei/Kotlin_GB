@@ -2,9 +2,13 @@ package com.example.kotlin_gb.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.kotlin_gb.app.App.Companion.getHistoryDao
+import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.model.convertWeatherDTOtoWeather
 import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.repository.DetailsRepositoryImpl
+import com.example.kotlin_gb.repository.LocalHistoryRepository
+import com.example.kotlin_gb.repository.LocalHistoryRepositoryImpl
 import com.example.kotlin_gb.repository.RemoteDataSource
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,14 +24,23 @@ private const val CORRUPTED_DATA = "CORRUPTED_DATA"
 
 class DetailsViewModel(
     val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val detailsRemoteImpl: DetailsRepositoryImpl = DetailsRepositoryImpl(RemoteDataSource())
+    private val detailsRemoteImpl: DetailsRepositoryImpl = DetailsRepositoryImpl(RemoteDataSource()),
+
+    //репозиторий, который мы получаем из статического метода:
+    private val historyRepository: LocalHistoryRepository = LocalHistoryRepositoryImpl(getHistoryDao())
 ) : ViewModel() {
 
+    // Удалили, т.к. этот метод и так есть по умолчанию
     //fun getLiveData() = detailsLiveData
 
     fun getWeatherFromRemoteSource(lat:Double, lon:Double) {
         detailsLiveData.value = AppState.Loading
         detailsRemoteImpl.getWeatherDetailsFromServer(lat, lon, callback)
+    }
+
+    //метод saveCityToDB, вызываемый из DetailsFragment
+    fun saveCityToDB(weather:Weather) {
+        historyRepository.saveEntity(weather)
     }
 
     private val callback = object : Callback<WeatherDTO> {

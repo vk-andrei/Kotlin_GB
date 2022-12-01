@@ -66,7 +66,7 @@ fun getWorldCities(): List<Weather> {
     return listOf(
         Weather(City("Лондон", 51.5085300, -0.1257400, "Great Britain"), 1, 2),
         Weather(City("Токио", 35.6895000, 139.6917100, "Japan"), 3, 4),
-        Weather(City("Париж", 48.8534100, 2.3488000, "Paris"), 5, 6),
+        Weather(City("Париж", 48.8534100, 2.3488000, "France"), 5, 6),
         Weather(City("Берлин", 52.52000659999999, 13.404953999999975, "Germany"), 7, 8),
         Weather(City("Рим", 41.9027835, 12.496365500000024, "Italy"), 9, 10),
         Weather(City("Минск", 53.90453979999999, 27.561524400000053, "Belarus"), 11, 12),
