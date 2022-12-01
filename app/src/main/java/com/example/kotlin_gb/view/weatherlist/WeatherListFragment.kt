@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentWeatherListBinding
-import com.example.kotlin_gb.model.City
-import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.room.model.City
+import com.example.kotlin_gb.room.model.Weather
 import com.example.kotlin_gb.utils.Const.Companion.LIST_OF_CITIES_KEY
 import com.example.kotlin_gb.utils.Const.Companion.RUSSIAN_KEY
 import com.example.kotlin_gb.utils.Const.Companion.WORLD_KEY

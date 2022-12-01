@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.databinding.FragmentHistoryRecyclerItemBinding
-import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.room.model.Weather
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 
 // Адаптер для RecyclerView абсолютно стандартный. В методе bind отображаем элемент списка

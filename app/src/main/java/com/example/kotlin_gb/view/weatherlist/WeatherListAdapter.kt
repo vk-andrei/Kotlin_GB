@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_gb.databinding.FragmentWeatherListRecyclerItemBinding
-import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.room.model.Weather
 import com.example.kotlin_gb.view.details.OnCityClickable
 
 class WeatherListAdapter(

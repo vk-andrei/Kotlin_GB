@@ -1,10 +1,9 @@
 package com.example.kotlin_gb.repository
 
-import com.example.kotlin_gb.model.dto.WeatherDTO
+import com.example.kotlin_gb.room.model.dto.WeatherDTO
 import com.example.kotlin_gb.utils.Const.Companion.X_YANDEX_API_KEY
-
-import retrofit2.http.*
 import retrofit2.*
+import retrofit2.http.*
 
 //Этим интерфейсом мы описываем конкретный запрос на сервер — запрос на данные погоды с
 //сервера Яндекса. Он формируется простым методом с аннотациями: указывается endpoint ссылки

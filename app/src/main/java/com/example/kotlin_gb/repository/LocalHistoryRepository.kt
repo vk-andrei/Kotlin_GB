@@ -1,6 +1,6 @@
 package com.example.kotlin_gb.repository
 
-import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.room.model.Weather
 
 // Два метода: получение истории запросов и сохранение очередного запроса в БД
 

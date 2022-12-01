@@ -1,8 +1,5 @@
 package com.example.kotlin_gb.utils
 
-import android.net.Uri
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
-
 class Const {
     companion object {
         const val REQUEST_METHOD = "GET"
