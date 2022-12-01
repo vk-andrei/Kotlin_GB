@@ -1,4 +1,4 @@
-package com.example.kotlin_gb.model
+package com.example.kotlin_gb.room.model
 
 import com.example.kotlin_gb.R
 

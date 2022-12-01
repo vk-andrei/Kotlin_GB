@@ -1,6 +1,6 @@
 package com.example.kotlin_gb.repository
 
-import com.example.kotlin_gb.model.Weather
+import com.example.kotlin_gb.room.model.Weather
 import com.example.kotlin_gb.room.HistoryDao
 import com.example.kotlin_gb.utils.Utils.convertHistoryEntityToWeather
 import com.example.kotlin_gb.utils.Utils.convertWeatherToEntity

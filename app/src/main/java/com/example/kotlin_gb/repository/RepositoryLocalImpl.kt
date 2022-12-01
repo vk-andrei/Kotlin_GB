@@ -1,9 +1,9 @@
 package com.example.kotlin_gb.repository
 
-import com.example.kotlin_gb.model.Location
-import com.example.kotlin_gb.model.Weather
-import com.example.kotlin_gb.model.getRussianCities
-import com.example.kotlin_gb.model.getWorldCities
+import com.example.kotlin_gb.room.model.Location
+import com.example.kotlin_gb.room.model.Weather
+import com.example.kotlin_gb.room.model.getRussianCities
+import com.example.kotlin_gb.room.model.getWorldCities
 
 class RepositoryLocalImpl : RepositorySingleWeatherGiver, RepositoryMultiWeatherGiver {
     override fun getWeather(lat: Double, lon: Double): Weather {

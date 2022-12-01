@@ -5,9 +5,9 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.kotlin_gb.R
-import com.example.kotlin_gb.model.City
-import com.example.kotlin_gb.model.Weather
 import com.example.kotlin_gb.room.HistoryEntity
+import com.example.kotlin_gb.room.model.City
+import com.example.kotlin_gb.room.model.Weather
 import com.example.kotlin_gb.utils.Const.Companion.YANDEX_API_SVG_ICON_URL
 import com.google.android.material.snackbar.Snackbar
 

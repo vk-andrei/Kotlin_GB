@@ -1,7 +1,7 @@
 package com.example.kotlin_gb.repository
 
 import com.example.kotlin_gb.BuildConfig
-import com.example.kotlin_gb.model.dto.WeatherDTO
+import com.example.kotlin_gb.room.model.dto.WeatherDTO
 import com.google.gson.GsonBuilder
 import retrofit2.Callback
 import retrofit2.Retrofit

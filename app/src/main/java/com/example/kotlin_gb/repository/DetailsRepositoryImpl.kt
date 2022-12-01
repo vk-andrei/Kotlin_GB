@@ -1,7 +1,6 @@
 package com.example.kotlin_gb.repository
 
-import com.example.kotlin_gb.model.dto.WeatherDTO
-import okhttp3.Callback
+import com.example.kotlin_gb.room.model.dto.WeatherDTO
 
 // имплементация репозитория, описанного выше в виде интерфейса
 // в репозиторий мы передаём источник данных — так репозиторий получает данные извне.

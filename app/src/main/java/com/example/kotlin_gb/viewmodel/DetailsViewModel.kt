@@ -3,13 +3,13 @@ package com.example.kotlin_gb.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlin_gb.app.App.Companion.getHistoryDao
-import com.example.kotlin_gb.model.Weather
-import com.example.kotlin_gb.model.convertWeatherDTOtoWeather
-import com.example.kotlin_gb.model.dto.WeatherDTO
 import com.example.kotlin_gb.repository.DetailsRepositoryImpl
 import com.example.kotlin_gb.repository.LocalHistoryRepository
 import com.example.kotlin_gb.repository.LocalHistoryRepositoryImpl
 import com.example.kotlin_gb.repository.RemoteDataSource
+import com.example.kotlin_gb.room.model.Weather
+import com.example.kotlin_gb.room.model.convertWeatherDTOtoWeather
+import com.example.kotlin_gb.room.model.dto.WeatherDTO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +39,7 @@ class DetailsViewModel(
     }
 
     //метод saveCityToDB, вызываемый из DetailsFragment
-    fun saveCityToDB(weather:Weather) {
+    fun saveCityToDB(weather: Weather) {
         historyRepository.saveEntity(weather)
     }
 

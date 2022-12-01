@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.room.Room
 import com.example.kotlin_gb.room.HistoryDao
 import com.example.kotlin_gb.room.HistoryDataBase
-import java.lang.IllegalStateException
 
 // Создадим базу через паттерн Singleton. Для этого определим статический метод, который будет
 //возвращать DAO. Именно через DAO мы вносим данные в базу, удаляем или изменяем их.
