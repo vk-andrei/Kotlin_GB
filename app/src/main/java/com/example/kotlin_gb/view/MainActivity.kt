@@ -3,7 +3,7 @@ package com.example.kotlin_gb.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_gb.R
-import com.example.kotlin_gb.view.contacts.ContentProviderFragment
+import com.example.kotlin_gb.view.contacts.ContactsFragment
 import com.example.kotlin_gb.view.history.HistoryFragment
 import com.example.kotlin_gb.view.weatherlist.WeatherListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.Contacts -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, ContentProviderFragment.newInstance())
+                        .replace(R.id.container, ContactsFragment.newInstance())
                         .addToBackStack("").commitAllowingStateLoss()
                 }
             }

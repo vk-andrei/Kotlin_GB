@@ -32,7 +32,7 @@ class ContactsRepositoryImpl(contextProvider: IContextProvider = ContextProvider
             null,
             null,
             null,
-            ContactsContract.Contacts.DISPLAY_NAME + "ASC"
+            ContactsContract.Contacts.DISPLAY_NAME + " ASC"
         )
 
         // Сюда загрузим все контакты

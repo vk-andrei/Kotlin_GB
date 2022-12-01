@@ -3,7 +3,6 @@ package com.example.kotlin_gb.view.contacts
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,23 +11,56 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import com.example.kotlin_gb.databinding.FragmentContentProviderBinding
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.kotlin_gb.databinding.FragmentContactsBinding
+import com.example.kotlin_gb.utils.Utils.hide
+import com.example.kotlin_gb.utils.Utils.show
+import com.example.kotlin_gb.viewmodel.AppStateContacts
+import com.example.kotlin_gb.viewmodel.ContactsViewModel
 
-class ContentProviderFragment : Fragment() {
+class ContactsFragment : Fragment() {
 
-    private var _binding: FragmentContentProviderBinding? = null
+    private val contactsViewModel: ContactsViewModel by lazy {
+        ViewModelProvider(this)[ContactsViewModel::class.java]
+    }
+
+    private val contactsAdapter: ContactsAdapter by lazy {
+        ContactsAdapter()
+    }
+
+    private var _binding: FragmentContactsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentContentProviderBinding.inflate(inflater, container, false)
+        _binding = FragmentContactsBinding.inflate(layoutInflater, container, false)
+        binding.rvContactsList.adapter = contactsAdapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
+        contactsViewModel.contacts.observe(viewLifecycleOwner) {
+            renderData(it)
+        }
+    }
+
+    private fun renderData(appStateContacts: AppStateContacts) {
+        when (appStateContacts) {
+            is AppStateContacts.Loading -> {
+                binding.rvContactsList.hide()
+                binding.includedLoadingLayout.root.show()
+            }
+            is AppStateContacts.Success -> {
+                binding.rvContactsList.show()
+                binding.includedLoadingLayout.root.hide()
+                contactsAdapter.contactsList = appStateContacts.contacts
+            }
+        }
     }
 
     // Проверяем, разрешено ли чтение контактов
@@ -71,25 +103,34 @@ class ContentProviderFragment : Fragment() {
     }
 
     private fun getContacts() {
-        Toast.makeText(context, "Getting contacts....", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Getting contacts....", Toast.LENGTH_SHORT).show()
+        contactsViewModel.getContacts()
     }
 
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                //TODO Permission is GRANTED
+                //Permission is GRANTED
+                getContacts()
             } else {
-                //TODO Permission is DENIED
+                //Permission is DENIED
+                context?.let {
+                    AlertDialog.Builder(it)
+                        .setTitle("Access to Contacts")
+                        .setMessage("Explanation")
+                        .setNegativeButton("Deny Access") { dialog, _ -> dialog.dismiss() }
+                        .create()
+                        .show()
+                }
             }
         }
 
-
     companion object {
-        fun newInstance() = ContentProviderFragment()
+        fun newInstance() = ContactsFragment()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 }
