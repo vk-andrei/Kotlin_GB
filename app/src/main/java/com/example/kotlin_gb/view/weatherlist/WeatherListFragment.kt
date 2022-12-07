@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 
@@ -34,6 +35,7 @@ import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
+import java.io.IOException
 
 
 class WeatherListFragment : Fragment() {
@@ -185,15 +187,45 @@ class WeatherListFragment : Fragment() {
 
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000L,
-                    1F,
-                    object : LocationListener {
-                        override fun onLocationChanged(location: Location) {
-                            Log.d("TAG", "location = ${location.latitude}, ${location.longitude}")
-                        }
-                    })
+                    6000L,
+                    0F,
+                    locationListener
+                )
             }
         }
+    }
+
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            Log.d("TAG", "location = ${location.latitude}, ${location.longitude}")
+            context?.let {
+                getAddressAsync(it, location)
+            }
+        }
+
+        // Если включен GPS
+        override fun onProviderEnabled(provider: String) {
+            Log.d("TAG", "GPS enable")
+            super.onProviderEnabled(provider)
+        }
+
+        // Если выключен GPS
+        override fun onProviderDisabled(provider: String) {
+            Log.d("TAG", "GPS disable")
+            super.onProviderDisabled(provider)
+        }
+    }
+
+    private fun getAddressAsync(context: Context, location: Location) {
+        val geocoder: Geocoder = Geocoder(context)
+        Thread {
+            try {
+                val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                Log.d("TAG", "address = $address")
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     private fun showWeatherListAndIcon(citiesArea: String) {
