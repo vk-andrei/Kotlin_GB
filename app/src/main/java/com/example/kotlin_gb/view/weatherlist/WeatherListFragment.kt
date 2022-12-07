@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -169,6 +170,8 @@ class WeatherListFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    lateinit var locationManager: LocationManager
+
     private fun getLocation() {
         // Еще раз проверяем РАЗРЕШЕНИЯ: ACCESS_COARSE_LOCATION + ACCESS_FINE_LOCATION
         if (ActivityCompat.checkSelfPermission(
@@ -180,17 +183,36 @@ class WeatherListFragment : Fragment() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
 
-            val locationManager =
+            locationManager =
                 requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+            // Если GPS работает:
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-                locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    6000L,
-                    0F,
-                    locationListener
-                )
+                val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                provider?.let {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        6000L,
+                        0F,
+                        locationListener
+                    )
+                }
+            } else { // Если GPS не работает, то вернуть последнее место:
+                val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                if (location == null) {
+                    Snackbar.make(
+                        binding.root,
+                        "GPS is OFF, location is UNKNOWN",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "GPS is OFF, this is the last location",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    getAddressAsync(requireContext(), location)
+                }
             }
         }
     }
@@ -214,14 +236,32 @@ class WeatherListFragment : Fragment() {
             Log.d("TAG", "GPS disable")
             super.onProviderDisabled(provider)
         }
+
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle?) {
+        }
     }
 
     private fun getAddressAsync(context: Context, location: Location) {
         val geocoder: Geocoder = Geocoder(context)
         Thread {
             try {
-                val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                Log.d("TAG", "address = $address")
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                Log.d("TAG", "address = $addresses")
+
+                val weatherByAddress = Weather(
+                    City(
+                        addresses!!.first().getAddressLine(0),
+                        location.latitude,
+                        location.longitude
+                    )
+                )
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .hide(this@WeatherListFragment)
+                    .add(R.id.container, WeatherDetailsFragment.newInstance(weatherByAddress))
+                    .addToBackStack("")
+                    .commit()
+                // Чтобы запрос был только ОДИН раз:
+                locationManager.removeUpdates(locationListener)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
