@@ -35,8 +35,10 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCJ-SxxE_BgdJjuZFkuq-iNiYk3p2kXmaI" />
+             android:value="${GOOGLE_MAP_API_KEY}"
 
+        />
+        <!--android:value="AIzaSyCJ-SxxE_BgdJjuZFkuq-iNiYk3p2kXmaI"-->
         <activity
             android:name=".view.MainActivity"
             android:exported="true"
