@@ -1,5 +1,6 @@
 package com.example.kotlin_gb.view.maps
 
+import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -14,10 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 
 class MapsFragment : Fragment() {
 
@@ -29,6 +27,15 @@ class MapsFragment : Fragment() {
         val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        // Рисовать линии между маркерами на карте:
+        googleMap.setOnMapLongClickListener {
+            addMarkerToArray(it)
+            setMarker(it, "", R.drawable.ic_marker_google_map)
+            drawLine()
+        }
+
+
         // + - на карте:
         googleMap.uiSettings.isZoomControlsEnabled = true
         // найти себя:
@@ -59,7 +66,7 @@ class MapsFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
 
         binding.btnSearchAddress.setOnClickListener {
-            binding.etSearchAddress.text.toString().let {searchAddress ->
+            binding.etSearchAddress.text.toString().let { searchAddress ->
 
                 if (searchAddress.trim() != "") {
                     val geocoder = Geocoder(requireContext())
@@ -97,6 +104,26 @@ class MapsFragment : Fragment() {
                 .title(searchText)
                 .icon(BitmapDescriptorFactory.fromResource(resourceId))
         )
+    }
+
+    private val markers = mutableListOf<Marker>()
+    private fun addMarkerToArray(location: LatLng) {
+        val marker = setMarker(location, markers.size.toString(), R.drawable.ic_marker_google_map)
+        markers.add(marker!!)
+    }
+
+    private fun drawLine() {
+        val last: Int = markers.size - 1
+        if (last >= 1) {
+            val previous: LatLng = markers[last - 1].position
+            val current: LatLng = markers[last].position
+            map.addPolyline(
+                PolylineOptions()
+                    .add(previous, current)
+                    .color(Color.RED)
+                    .width(10f)
+            )
+        }
     }
 
     override fun onDestroy() {
