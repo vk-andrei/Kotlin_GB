@@ -1,48 +1,106 @@
 package com.example.kotlin_gb.view.maps
 
-import androidx.fragment.app.Fragment
-
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.example.kotlin_gb.R
-
+import com.example.kotlin_gb.databinding.FragmentMapsUiBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MapsFragment : Fragment() {
 
+    private lateinit var map: GoogleMap
+
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+        map = googleMap
+
         val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        // + - на карте:
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        // найти себя:
+        // TODO permission for this!!!
+        googleMap.isMyLocationEnabled = true
+        googleMap.uiSettings.isMyLocationButtonEnabled = true
     }
+
+
+    private var _binding: FragmentMapsUiBinding? = null
+    private val binding: FragmentMapsUiBinding
+        get() {
+            return _binding!!
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+    ): View {
+        _binding = FragmentMapsUiBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+
+        binding.btnSearchAddress.setOnClickListener {
+            binding.etSearchAddress.text.toString().let {searchAddress ->
+
+                if (searchAddress.trim() != "") {
+                    val geocoder = Geocoder(requireContext())
+                    val address = geocoder.getFromLocationName(searchAddress, 1)
+                    Log.d("TAG", "$address")
+                    if (address != null && address.size != 0) {
+                        val ln = LatLng(address.first().latitude, address.first().longitude)
+                        setMarker(
+                            ln,
+                            searchAddress,
+                            R.drawable.ic_marker_google_map
+                        )
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(ln, 10f))
+
+                    } else {
+                        // TODO ВЫНЕСТИ ВСЕ АЛЕРТЫ В Utils!!!!
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Searching your address")
+                            .setMessage("UNKNOWN ADDRESS!!!")
+                            .setPositiveButton("OK") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setMarker(location: LatLng, searchText: String, resourceId: Int): Marker? {
+        return map.addMarker(
+            MarkerOptions()
+                .position(location)
+                .title(searchText)
+                .icon(BitmapDescriptorFactory.fromResource(resourceId))
+        )
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }
