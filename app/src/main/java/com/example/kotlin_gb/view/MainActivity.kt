@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_gb.R
 import com.example.kotlin_gb.view.contacts.ContactsFragment
 import com.example.kotlin_gb.view.history.HistoryFragment
+import com.example.kotlin_gb.view.maps.MapsFragment
 import com.example.kotlin_gb.view.weatherlist.WeatherListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -32,6 +33,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.Contacts -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.container, ContactsFragment.newInstance())
+                        .addToBackStack("").commitAllowingStateLoss()
+                }
+                R.id.Maps -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, MapsFragment())
                         .addToBackStack("").commitAllowingStateLoss()
                 }
             }

@@ -1,11 +1,23 @@
 package com.example.kotlin_gb.view.weatherlist
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +36,8 @@ import com.example.kotlin_gb.view.details.WeatherDetailsFragment
 import com.example.kotlin_gb.viewmodel.AppState
 import com.example.kotlin_gb.viewmodel.WeatherListViewModel
 import com.google.android.material.snackbar.Snackbar
+import java.io.IOException
+
 
 class WeatherListFragment : Fragment() {
 
@@ -62,7 +76,7 @@ class WeatherListFragment : Fragment() {
 
         showWeatherListAndIcon(citiesAreaKey)
 
-        binding.fab.setOnClickListener {
+        binding.fabSelectCitiesRegion.setOnClickListener {
             when (citiesAreaKey) {
                 RUSSIAN_KEY -> {
                     citiesAreaKey = WORLD_KEY
@@ -73,6 +87,10 @@ class WeatherListFragment : Fragment() {
                     showWeatherListAndIcon(citiesAreaKey)
                 }
             }
+        }
+
+        binding.fabFindGeoLocation.setOnClickListener {
+            checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)
         }
 
         binding.btnFindWithCoordinates.setOnClickListener {
@@ -99,16 +117,167 @@ class WeatherListFragment : Fragment() {
         }
     }
 
+    private fun checkPermission(accessFineLocation: String) {
+
+        val permResult = ContextCompat.checkSelfPermission(requireContext(), accessFineLocation)
+
+        //Проверяем случай, если разрешение на доступ к контактам уже дано.
+        if (permResult == PackageManager.PERMISSION_GRANTED) {
+            getLocation()
+        }
+        //Опционально: если во второй раз (так же??)
+        else if (shouldShowRequestPermissionRationale(accessFineLocation)) {
+            showRationaleDialog(accessFineLocation)
+        } else {
+            permissionRequest(accessFineLocation)
+        }
+    }
+
+    private fun showRationaleDialog(accessFineLocation: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Access to Location")
+            .setMessage("Explanation, Explanation, Explanation")
+            .setPositiveButton("Grant Access") { _, _ ->
+                permissionRequest(accessFineLocation)
+            }
+            .setNegativeButton("Deny Access") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private val REQUEST_CODE_LOCATION = 999
+
+    private fun permissionRequest(permission: String) {
+        requestPermissions(arrayOf(permission), REQUEST_CODE_LOCATION)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE_LOCATION) {
+            for (pIndex in permissions.indices) {
+                if (permissions[pIndex] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                    grantResults[pIndex] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    getLocation()
+                    Log.d("TAG", "Im HERE!!!")
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    lateinit var locationManager: LocationManager
+
+    private fun getLocation() {
+        // Еще раз проверяем РАЗРЕШЕНИЯ: ACCESS_COARSE_LOCATION + ACCESS_FINE_LOCATION
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+
+            locationManager =
+                requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            // Если GPS работает:
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                provider?.let {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        6000L,
+                        0F,
+                        locationListener
+                    )
+                }
+            } else { // Если GPS не работает, то вернуть последнее место:
+                val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                if (location == null) {
+                    Snackbar.make(
+                        binding.root,
+                        "GPS is OFF, location is UNKNOWN",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "GPS is OFF, this is the last location",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    getAddressAsync(requireContext(), location)
+                }
+            }
+        }
+    }
+
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            Log.d("TAG", "location = ${location.latitude}, ${location.longitude}")
+            context?.let {
+                getAddressAsync(it, location)
+            }
+        }
+
+        // Если включен GPS
+        override fun onProviderEnabled(provider: String) {
+            Log.d("TAG", "GPS enable")
+            super.onProviderEnabled(provider)
+        }
+
+        // Если выключен GPS
+        override fun onProviderDisabled(provider: String) {
+            Log.d("TAG", "GPS disable")
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle?) {
+        }
+    }
+
+    private fun getAddressAsync(context: Context, location: Location) {
+        val geocoder: Geocoder = Geocoder(context)
+        Thread {
+            try {
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                Log.d("TAG", "address = $addresses")
+
+                val weatherByAddress = Weather(
+                    City(
+                        addresses!!.first().getAddressLine(0),
+                        location.latitude,
+                        location.longitude
+                    )
+                )
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .hide(this@WeatherListFragment)
+                    .add(R.id.container, WeatherDetailsFragment.newInstance(weatherByAddress))
+                    .addToBackStack("")
+                    .commit()
+                // Чтобы запрос был только ОДИН раз:
+                locationManager.removeUpdates(locationListener)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
     private fun showWeatherListAndIcon(citiesArea: String) {
         when (citiesArea) {
             RUSSIAN_KEY -> {
                 viewModel.getRussianList()
-                binding.fab
+                binding.fabSelectCitiesRegion
                     .setImageResource(R.drawable.flag_russia)
             }
             WORLD_KEY -> {
                 viewModel.getWorldList()
-                binding.fab
+                binding.fabSelectCitiesRegion
                     .setImageResource(R.drawable.flag_world)
             }
         }
@@ -159,19 +328,19 @@ class WeatherListFragment : Fragment() {
     // Функция-расширение
     private fun FragmentWeatherListBinding.loading() {
         this.flLoadingLayout.visibility = View.VISIBLE
-        this.fab.visibility = View.GONE
+        this.fabSelectCitiesRegion.visibility = View.GONE
     }
 
     // Функция-расширение
     private fun FragmentWeatherListBinding.showResult() {
         this.flLoadingLayout.visibility = View.GONE
-        this.fab.visibility = View.VISIBLE
+        this.fabSelectCitiesRegion.visibility = View.VISIBLE
     }
 
     // Функция-расширение
     private fun FragmentWeatherListBinding.showError() {
         this.flLoadingLayout.visibility = View.GONE
-        this.fab.visibility = View.GONE
+        this.fabSelectCitiesRegion.visibility = View.GONE
     }
 
     override fun onStop() {

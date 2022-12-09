@@ -11,8 +11,13 @@
         android:title="History" />
 
     <item
-        android:id="@+id/Contacts"
-        android:icon="@drawable/ic_contacts"
-        android:title="Contacts" />
+    android:id="@+id/Contacts"
+    android:icon="@drawable/ic_contacts"
+    android:title="Contacts" />
+
+    <item
+        android:id="@+id/Maps"
+        android:icon="@drawable/ic_map"
+        android:title="Maps" />
 
 </menu>

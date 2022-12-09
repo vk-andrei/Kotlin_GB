@@ -16,4 +16,7 @@
     <string name="latitude">lat</string>
     <string name="longitude">lon</string>
     <string name="find">Find</string>
+    <string name="defaultAddress">Volgograd</string>
+    <string name="search">SEARCH</string>
+    <string name="volgograd_lenina_street_19">Volgograd, Lenina street 19</string>
 </resources>
