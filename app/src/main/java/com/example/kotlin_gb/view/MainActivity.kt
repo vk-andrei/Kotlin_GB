@@ -1,8 +1,17 @@
 package com.example.kotlin_gb.view
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.example.kotlin_gb.R
+import com.example.kotlin_gb.utils.Const.Companion.CHANNEL_HIGH_PRIORITY_ID
+import com.example.kotlin_gb.utils.Const.Companion.CHANNEL_LOW_PRIORITY_ID
+import com.example.kotlin_gb.utils.Const.Companion.NOTIFICATION_ID_HIGH
+import com.example.kotlin_gb.utils.Const.Companion.NOTIFICATION_ID_LOW
 import com.example.kotlin_gb.view.contacts.ContactsFragment
 import com.example.kotlin_gb.view.history.HistoryFragment
 import com.example.kotlin_gb.view.maps.MapsFragment
@@ -47,6 +56,60 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, WeatherListFragment.newInstance()).commit()
+        }
+
+        // NOTIFICATION:
+        pushNotification("Attention!", "We make new feature. Update!!!", NOTIFICATION_ID_HIGH)
+        pushNotification("Little attention.", "Hi! How are you?", NOTIFICATION_ID_LOW)
+    }
+
+    private fun pushNotification(title: String, body: String, notificationID: Int) {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        when (notificationID) {
+            NOTIFICATION_ID_HIGH -> {
+                val notificationHigh =
+                    NotificationCompat.Builder(this, CHANNEL_HIGH_PRIORITY_ID).apply {
+                        setContentTitle(title)
+                        setContentText(body)
+                        setSmallIcon(R.drawable.ic_marker_google_map)
+                        priority = NotificationCompat.PRIORITY_MAX
+                        //intent = PendingIntent(). TODO сделать чтобы открывалось это иди др приложение
+                    }.build()
+                // После 26 версии доступно НЕСКОЛЬКО каналов для ПУШЕЙ (пользователь может отключать или все или некоторые)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val channelHigh = NotificationChannel(
+                        CHANNEL_HIGH_PRIORITY_ID,
+                        "CHANNEL HIGH",
+                        NotificationManager.IMPORTANCE_HIGH
+                    )
+                    channelHigh.description = "Channel for importance notifications"
+                    notificationManager.createNotificationChannel(channelHigh)
+                }
+                // до 26 версии ТОЛЬКО один канал для пушей: (Эта строчка нужна и для версии выше 26!)
+                notificationManager.notify(notificationID, notificationHigh)
+            }
+
+            NOTIFICATION_ID_LOW -> {
+                val notificationLow =
+                    NotificationCompat.Builder(this, CHANNEL_LOW_PRIORITY_ID).apply {
+                        setContentTitle(title)
+                        setContentText(body)
+                        setSmallIcon(R.drawable.ic_marker_google_map)
+                        priority = NotificationCompat.PRIORITY_MAX
+                    }.build()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val channelLow = NotificationChannel(
+                        CHANNEL_LOW_PRIORITY_ID, "CHANNEL LOW", NotificationManager.IMPORTANCE_LOW
+                    )
+                    channelLow.description = "Channel for NOT importance notifications"
+                    notificationManager.createNotificationChannel(channelLow)
+
+                }
+                // до 26 версии ТОЛЬКО один канал для пушей: (Эта строчка нужна и для версии выше 26!)
+                notificationManager.notify(notificationID, notificationLow)
+            }
         }
     }
 }
