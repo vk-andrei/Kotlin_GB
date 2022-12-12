@@ -10,7 +10,12 @@ class Const {
         // FOR NOTIFICATIONS
         const val CHANNEL_HIGH_PRIORITY_ID = "CHANNEL_HIGH_PRIORITY_ID"
         const val CHANNEL_LOW_PRIORITY_ID = "CHANNEL_LOW_PRIORITY_ID"
-        const val NOTIFICATION_ID = 1
+        const val NOTIFICATION_ID_HIGH = 1
+        const val NOTIFICATION_ID_LOW = 2
+        const val NOTIFICATION_ID_FIRE_CLOUD = 3
+        const val NOTIFICATION_KEY_TITLE = "MY_TITLE"
+        const val NOTIFICATION_KEY_MESSAGE = "MY_MESSAGE"
+
 
         // For DetailService
         const val DETAILS_INTENT_FILTER = "DETAILS_INTENT_FILTER"
