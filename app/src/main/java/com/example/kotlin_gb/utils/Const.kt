@@ -7,6 +7,16 @@ class Const {
         const val HTTPS_YANDEX_URL = "https://api.weather.yandex.ru/v2/informers"
         const val X_YANDEX_API_KEY = "X-Yandex-API-Key"
 
+        // FOR NOTIFICATIONS
+        const val CHANNEL_HIGH_PRIORITY_ID = "CHANNEL_HIGH_PRIORITY_ID"
+        const val CHANNEL_LOW_PRIORITY_ID = "CHANNEL_LOW_PRIORITY_ID"
+        const val NOTIFICATION_ID_HIGH = 1
+        const val NOTIFICATION_ID_LOW = 2
+        const val NOTIFICATION_ID_FIRE_CLOUD = 3
+        const val NOTIFICATION_KEY_TITLE = "MY_TITLE"
+        const val NOTIFICATION_KEY_MESSAGE = "MY_MESSAGE"
+
+
         // For DetailService
         const val DETAILS_INTENT_FILTER = "DETAILS_INTENT_FILTER"
         const val LATITUDE_EXTRA = "LATITUDE_EXTRA"

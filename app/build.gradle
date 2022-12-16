@@ -5,6 +5,8 @@ plugins {
     // For annotations (for work with Room)
     id 'kotlin-kapt'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    // FOR FIRE CLOUD MESSAGE
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -20,6 +22,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("keystore_release.jks")
+            storePassword '123456'
+            keyAlias '0'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes.each {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
@@ -30,10 +41,20 @@ android {
         it.buildConfigField "String", "GOOGLE_MAP_API_KEY", apiKeyGoogleMaps
     }
 
+
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            it.buildConfigField "String", "MY_BUILD_TYPE", "\"RELEASE\""
+            resValue("string", "my_build_type", "MY RELEASE FROM RESOURCE")
+        }
+        debug {
+            versionNameSuffix '-debug'
+            it.buildConfigField "String", "MY_BUILD_TYPE", "\"DEBUG\""
+            resValue("string", "my_build_type", "MY DEBUG FROM RESOURCE")
         }
     }
 
@@ -48,6 +69,18 @@ android {
 
     buildFeatures {
         viewBinding = true
+    }
+    // Добавил FLAVORS
+    flavorDimensions 'version'
+    productFlavors {
+        FREE {
+            dimension 'version'
+            versionNameSuffix '.free'
+        }
+        PRO {
+            dimension 'version'
+            versionNameSuffix '.pro'
+        }
     }
 }
 
@@ -99,5 +132,10 @@ dependencies {
     // For navigation Bottom menu
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+
+    // FOR FIRE CLOUD MESSAGE
+    //implementation platform('com.google.firebase:firebase-bom:31.1.1')       ??? было на сайте у них
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
+
 
 }
