@@ -36,7 +36,21 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            it.buildConfigField "String", "MY_BUILD_TYPE", "\"RELEASE\""
+            resValue("string", "my_build_type", "MY RELEASE FROM RESOURCE")
         }
+        debug {
+            versionNameSuffix '-debug'
+            it.buildConfigField "String", "MY_BUILD_TYPE", "\"DEBUG\""
+            resValue("string", "my_build_type", "MY DEBUG FROM RESOURCE")
+        }
+        beta {
+            initWith debug
+            versionNameSuffix '-beta'
+            it.buildConfigField "String", "MY_BUILD_TYPE", "\"BETA\""
+            resValue("string", "my_build_type", "MY BETA FROM RESOURCE")
+        }
+
     }
 
     compileOptions {
